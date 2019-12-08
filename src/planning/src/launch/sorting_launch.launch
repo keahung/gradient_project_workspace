@@ -1,0 +1,14 @@
+<launch>
+
+
+
+  <node pkg="vision" type="image_processing_node" name="cube_finder" />
+  <node pkg ="planning" type="sort_cubes" name="cube_sorter" />
+
+  <include file="$(find baxter_moveit_config)/launch/move_group.launch"> </include>
+
+  <include file="$(find baxter_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true"/>
+  </include>
+
+</launch>

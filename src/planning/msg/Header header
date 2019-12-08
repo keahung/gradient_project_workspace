@@ -1,0 +1,4 @@
+Header header
+string child_frame_id
+geometry_msgs/PoseStamped cube_position
+geometry_msgs/PoseStamped end_position
