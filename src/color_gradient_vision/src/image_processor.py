@@ -209,6 +209,8 @@ def compute_color_hue(image, c):
 
 
 def get_centers(image):
+    original_shape = image.shape
+
     # load image as <rgb> and crop if necessary
     image = cv2.cvtColor(image.astype('uint8'), cv2.COLOR_BGR2RGB)
     image = robot_crop(image)
@@ -279,6 +281,11 @@ def get_centers(image):
         #print(cnt2[:5])
         coords = np.mean(np.array(np.where(markers == marker)), axis = 1).astype('uint16')
         centers[marker - 2, :] = coords
+
+        #Upscaling coords to be in actual pixel coordinates. Possibly flip y axis. 
+        coords *= np.sqrt(10000)
+        #coords[1] = original_shape[1] - coords[1]
+        
         res.append([coords, color])
         #cv2.circle(image_copy, (coords[1], coords[0]), 2, (0, 255, 0), -1)
     #plt.show()
