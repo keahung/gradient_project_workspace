@@ -20,6 +20,7 @@ from color_gradient_vision.msg import ColorAndPositionPairs, ColorAndPosition
 import tf
 from tf.transformations import quaternion_from_euler
 import tf2_ros
+import image_geometry
 
 from sensor_msgs import CameraInfo
 from path_planner import PathPlanner

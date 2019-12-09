@@ -259,6 +259,12 @@ def get_centers(image):
     markers = cv2.watershed(image_copy, markers)
     image_copy[markers == -1] = [255,0,0]
 
+
+    current_shape = image.shape
+    scaling_factor = original_shape[0] / current_shape[0]
+    print("Upscaling by", scaling_factor)
+
+
     # iterate through markers and find centers
     num_blocks = np.max(markers) - 1
     print('number of blocks detected: ' + str(num_blocks))
@@ -283,9 +289,9 @@ def get_centers(image):
         centers[marker - 2, :] = coords
 
         #Upscaling coords to be in actual pixel coordinates. Possibly flip y axis. 
-        coords *= np.sqrt(10000)
+        coords *= scaling_factor
         #coords[1] = original_shape[1] - coords[1]
-        
+
         res.append([coords, color])
         #cv2.circle(image_copy, (coords[1], coords[0]), 2, (0, 255, 0), -1)
     #plt.show()
