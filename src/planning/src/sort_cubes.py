@@ -35,7 +35,7 @@ projection_matrix = np.array([[1007.739501953125, 0, 617.3479149530467, 0],
 	[0, 0, 1, 0]])
 
 #camera_coords should be an [x, y] pair
-def find_cube_coords(camera_coords):
+def find_cube_coords(camera_coords, table_height):
 	rate = rospy.Rate(10.0)
 	while not rospy.is_shutdown():
 		try:
@@ -73,7 +73,6 @@ rospy.init_node('sort_cubes_node')
 
 tfBuffer = tf2_ros.Buffer()
 listener = tf2_ros.TransformListener(tfBuffer)
-table_height = -0.26
 
 cubes_container = []
 update_cube_positions = gen_update_cube_positions(cubes_container)
