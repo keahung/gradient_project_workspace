@@ -34,15 +34,12 @@ projection_matrix = np.array([[1007.739501953125, 0, 617.3479149530467, 0],
 	[0, 1011.606872558594, 407.8221878260792, 0], 
 	[0, 0, 1, 0]])
 
-#camera_coords should be an [x, y] pair
-def find_cube_coords(camera_coords, table_height):
-	rate = rospy.Rate(10.0)
-	while not rospy.is_shutdown():
-		try:
-			trans = fBuffer.lookup_transform('/camera_frame', '/base', rospy.Time()).transform
-		except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-			continue
+surface_height = table_height
 
+#camera_coords should be an [x, y] pair
+def find_cube_coords(camera_coords, camera_transform):
+	trans = camera_transform
+	
 	q = trans.rotation
 	q = np.array([q.w, q.x, q.y. q.z])
 	rot = R.from_quat(q)
@@ -63,21 +60,31 @@ def find_cube_coords(camera_coords, table_height):
 	cube_pos = t * base_frame_vec + trans
 	return cube_pos
 
-def gen_update_cube_positions(cubes_container):
-	def update_cube_positions(new_cubes):
-		cubes_container[0] = new_cubes
-	return update_cube_positions
+def get_camera_transform(tfBuffer):
+	rate = rospy.Rate(10.0)
+	while not rospy.is_shutdown():
+		try:
+			trans = fBuffer.lookup_transform('/camera_frame', '/base', rospy.Time()).transform
+		except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+			continue
+	return trans
+
+def process_cubes(cubes, tfBuffer):
+	transform = get_camera_transform(tfBuffer)
+	processed_cubes = []
+	for cube in cubes:
+		x, y, hue = cube.x, cube.y, cube.hue
+		cube_pos = find_cube_coords((x, y), transform)
+		new_cube = (cube_pos[0], cube_pos[1], hue)
+		processed_cubes.append(new_cube)
+	return processed_cubes
+
 
 
 rospy.init_node('sort_cubes_node')
 
 tfBuffer = tf2_ros.Buffer()
 listener = tf2_ros.TransformListener(tfBuffer)
-
-cubes_container = []
-update_cube_positions = gen_update_cube_positions(cubes_container)
-rospy.Subscriber("colors_and_position", ColorAndPositionPairs, update_cube_positions)
-
 
 planner = PathPlanner("right_arm")
 orien_const = OrientationConstraint()
@@ -122,11 +129,10 @@ while not rospy.is_shutdown():
 		else:
 			break
 
-	#TODO 
-	# 
-	cubes = cubes_container[0]
+	cubes = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
+	cubes = process_cubes(cubes, tfBuffer)
 
-	cube_path = get_cube_path(cubes, color_piles)
+	cube_path = get_cube_path_hue(cubes, table, surface_height)
 	manipulator_path = get_manipulator_path(cube_path, default_coords)
 
 
@@ -165,8 +171,6 @@ while not rospy.is_shutdown():
 			print(e)
 		else:
 			break
-
-
 
 def test():
 	cubes = [(0.6, -0.3, "red"), (0.5, -0.2, "blue"), (0.67, -0.25, "green")]
