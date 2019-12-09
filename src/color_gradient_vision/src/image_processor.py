@@ -210,10 +210,11 @@ def compute_color_hue(image, c):
 
 def get_centers(image):
     original_shape = image.shape
+    print("original_shape", original_shape)
 
     # load image as <rgb> and crop if necessary
     image = cv2.cvtColor(image.astype('uint8'), cv2.COLOR_BGR2RGB)
-    image = robot_crop(image)
+    #image = robot_crop(image)
 
     # downsample and find average <hsv> background color
     image_hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
@@ -259,6 +260,9 @@ def get_centers(image):
     markers = cv2.watershed(image_copy, markers)
     image_copy[markers == -1] = [255,0,0]
 
+    # downsampled_shape = image.shape
+    # scaling_factor = original_shape[0] / downsampled_shape[0]
+
     # iterate through markers and find centers
     num_blocks = np.max(markers) - 1
     print('number of blocks detected: ' + str(num_blocks))
@@ -280,11 +284,11 @@ def get_centers(image):
         #cnt2 = np.reshape(cnt, (cnt.shape[2], 1, 2))
         #print(cnt2[:5])
         coords = np.mean(np.array(np.where(markers == marker)), axis = 1).astype('uint16')
+        #coords[1] = original_shape[1] - coords[1]
+
         centers[marker - 2, :] = coords
 
-        #Upscaling coords to be in actual pixel coordinates. Possibly flip y axis. 
-        coords *= np.sqrt(10000)
-        #coords[1] = original_shape[1] - coords[1]
+
         
         res.append([coords, color])
         #cv2.circle(image_copy, (coords[1], coords[0]), 2, (0, 255, 0), -1)
