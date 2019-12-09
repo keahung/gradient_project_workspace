@@ -79,7 +79,7 @@ def get_cube_path(cubes, color_piles):
 def get_cube_path_hue(cubes, table, surface_height):
 	cube = pick_target_cube_hue(cubes, table, surface_height)
 	cube_pos = np.array((cube[0], cube[1], surface_height))
-	target_pos = np.array(pick_target_position_hue(cube, table surface_height))
+	target_pos = np.array(pick_target_position_hue(cube, table, surface_height))
 	print(cube_pos, target_pos)
 	return [cube_pos, target_pos]
 
