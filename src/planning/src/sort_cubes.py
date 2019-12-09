@@ -63,12 +63,6 @@ def find_cube_coords(camera_coords):
 	cube_pos = t * base_frame_vec + trans
 	return cube_pos
 
-def gen_update_cube_positions(cubes_container):
-	def update_cube_positions(new_cubes):
-		cubes_container[0] = new_cubes
-	return update_cube_positions
-
-
 rospy.init_node('sort_cubes_node')
 
 tfBuffer = tf2_ros.Buffer()
@@ -125,9 +119,9 @@ while not rospy.is_shutdown():
 
 	#TODO 
 	# 
-	cubes = cubes_container[0]
+	cubes = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
 
-	cube_path = get_cube_path(cubes, color_piles)
+	cube_path = get_cube_path_hue(cubes, table, surface_height)
 	manipulator_path = get_manipulator_path(cube_path, default_coords)
 
 
