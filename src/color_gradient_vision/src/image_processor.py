@@ -261,7 +261,7 @@ def get_centers(image):
     num_blocks = np.max(markers) - 1
     print('number of blocks detected: ' + str(num_blocks))
     centers = np.zeros((num_blocks, 2)).astype('uint16')
-    fig=plt.figure(figsize=(8, 8))
+    #fig=plt.figure(figsize=(8, 8))
     index = 0
     res = []
     for marker in range(2, 2 + num_blocks):
