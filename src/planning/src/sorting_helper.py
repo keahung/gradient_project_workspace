@@ -150,7 +150,7 @@ def get_pose(coords, quaternion):
 table = [0.45, 0.8, -0.27, -0.45]
 colors = ["red", "blue", "green"]
 color_piles = get_color_piles(table, colors)
-print("color piles", color_piles)
+#print("color piles", color_piles)
 
 surface_height = -0.2
 default_coords = np.array([0.6, -0.5, -0.17])
