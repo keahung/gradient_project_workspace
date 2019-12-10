@@ -22,25 +22,26 @@ from tf.transformations import quaternion_from_euler
 import tf2_ros
 import image_geometry
 
-from sensor_msgs import CameraInfo
+from sensor_msgs.msg import CameraInfo
 from path_planner import PathPlanner
 
-
+rospy.init_node('sort_cubes_node')
 
 
 #If projection matrix seems incorrect, get values from
 #"/right_hand_camera/camera_info"
 print("getting camera info")
-camera_info = rospy.wait_for_message("/right_hand_camera/camera_info", CameraInfo)
+camera_info = rospy.wait_for_message("/cameras/right_hand_camera/camera_info", CameraInfo)
+#print(camera_info)
 camera_model = image_geometry.PinholeCameraModel()
-camera_model.fromCameraInfo(data)
-print("center pixel of camera", camera_model.project3dToPixel(0, 0, 1))
+camera_model.fromCameraInfo(camera_info)
+print("center pixel of camera", camera_model.project3dToPixel((0, 0, 1)))
 
 table_height = surface_height
 
 #camera_coords should be an [x, y] pair
-def find_cube_coords(camera_coords, camera_transform, camera_model):
-	table_height = -0.24 #TODO determine table height accurately. 
+def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
+	table_height = -0.3 #TODO determine table height accurately. 
 
 	# projection_matrix = np.array([[1007.739501953125, 0, 617.3479149530467, 0], 
 	# [0, 1011.606872558594, 407.8221878260792, 0], 
@@ -50,47 +51,53 @@ def find_cube_coords(camera_coords, camera_transform, camera_model):
 					[0.0, 0.0, 1.0, 0.0]])
 
 
-
+	#print("camera_transform", camera_transform)
 	trans = camera_transform.transform
 
 	q = trans.rotation
+	q = np.array([q.w, q.x, q.y, q.z])
 	rot = tf.transformations.quaternion_matrix(q)
-	rot = rot[:3, :3]
+	rot = -rot[:3, :3]
+	print(rot)
 
-	# t = trans.translation
-	# trans = np.array([t.x, t.y, t.z])
+	t = trans.translation
+	trans = np.array([t.x, t.y, t.z])
 
 
 
 	camera_point = np.array([camera_coords[0], camera_coords[1], 1])
 	projection_matrix = projection_matrix[:, :3]
 	spacial_vec = np.linalg.solve(projection_matrix, camera_point)
-	print("lin alg camera vec", spacial_vec)
-
+	spacial_vec /= np.linalg.norm(spacial_vec)
+	#print("lin alg camera vec", spacial_vec)
 
 	raw_x, raw_y = camera_coords[0], camera_coords[1]
-	x, y = camera_model.rectifyPoint(raw_x, raw_y)
-	camera_vec = camera_model.projectPixelTo3dRay(x, y)
-	print("tf camera vec", camera_vec)
+	x, y = camera_model.rectifyPoint((raw_x, raw_y))
+	camera_vec = camera_model.projectPixelTo3dRay((x, y))
+	#print("tf camera vec", camera_vec)
 
-	stamped_camera_vec = Vector3Stamped(trans.header, camera_vec)
+	#header = camera_transform.header
+	#header.frame_id = camera_transform.child_frame_id
+	#stamped_camera_vec = Vector3Stamped(header, camera_vec)
+	#base_vec = listener.transformVector("base", stamped_camera_vec)
+
 
 	#potential points will be of the form T + (Rx)t
 	base_vec_basic = np.dot(rot, spacial_vec)
-	base_vec = listener.transformVector("base", camera_vec)
+	base_vec = np.dot(rot, np.array(camera_vec))
+	
 
 	print("comparing base vec from ros transform and manual")
-	print(base_vec.vector)
+	print(base_vec)
 	print(base_vec_basic)
 
 
 	b = base_vec
-	t = (table_height - trans.z) / base_vec.z
+	t = (table_height - trans[2]) / base_vec[2]
 
-	print(t)
+	print("camera vec length", t)
 
-	base_frame_vec = np.array([b.x, b.y, b.z])
-	cube_pos = t * base_frame_vec + trans
+	cube_pos = t * base_vec + trans
 	return cube_pos
 
 def get_camera_transform(tfBuffer):
@@ -110,19 +117,31 @@ def process_cubes(cubes, tfBuffer, listener):
 	# print(cubes)
 	processed_cubes = []
 	for cube in cubes:
-		x, y, hue = cube.x, cube.y, cube.R
+		y, x, hue = cube.x, cube.y, cube.R
 		cube_pos = find_cube_coords((x, y), camera_model, transform, listener)
 		new_cube = (cube_pos[0], cube_pos[1], hue)
 		processed_cubes.append(new_cube)
 	print(processed_cubes)
 	return processed_cubes
 
-
-
-rospy.init_node('sort_cubes_node')
-
 tfBuffer = tf2_ros.Buffer()
 listener = tf2_ros.TransformListener(tfBuffer)
+
+while not rospy.is_shutdown():
+	message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
+	cubes = message.pairs
+	cubes = [cubes[0]]
+	cubes[0].x = 630
+	cubes[0].y = 442
+	print("3D cube coordinates")
+	cubes = process_cubes(cubes, tfBuffer, listener)
+
+	print("found cubes", cubes)
+
+	raw_input("press enter to relocate cubes")
+
+
+#listener = tf.Transformer()
 
 planner = PathPlanner("right_arm")
 orien_const = OrientationConstraint()
@@ -176,7 +195,8 @@ while not rospy.is_shutdown():
 
 		raw_input("press enter to relocate cubes")
 
-	cube_path = get_cube_path_hue(cubes, table, surface_height)
+	cube_path = get_cube_path_hue(cubes)
+	h_hue(cubes, table, surface_height)
 	manipulator_path = get_manipulator_path(cube_path, default_coords)
 
 	print("first cube", cube_path[0])
@@ -194,6 +214,7 @@ while not rospy.is_shutdown():
 	# 	while not rospy.is_shutdown():
 	# 		try:
 	# 			plan = planner.plan_to_pose(goal, [])
+
 	# 			# print(plan)
 	# 			raw_input("Press <Enter> to move the right arm to goal pose 3: ")
 	# 			result = planner.execute_plan(plan)
