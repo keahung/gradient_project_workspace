@@ -182,6 +182,9 @@ planner.add_box_obstacle(table_size, "table", table_pose)
 
 
 while not rospy.is_shutdown():
+
+
+	#Move right arm to default pose. 
 	while not rospy.is_shutdown():
 		try:
 			plan = planner.plan_to_pose(default_pose, [])
@@ -196,28 +199,30 @@ while not rospy.is_shutdown():
 		else:
 			break
 
+	raw_input("Press enter if camera correctly positioned")
+	#Get positions of cubes. 
 	message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
 	cubes = message.pairs
 	# cubes = [cubes[0]]
 	# cubes[0].x = 630
 	# cubes[0].y = 442
-	print("3D cube coordinates")
 	cubes = process_cubes(cubes, tfBuffer, listener)
 
 	#print("found cubes", cubes)
 
-	table_height = -0.15
-	cubes[0] = (0.61, -0.4, 100)
-	print("first cube", cubes[0])
-	cubes = [cubes[0]]
+	table_height = -0.2
+	# cubes[0] = (0.41, -0.4, 100)
+	# print("first cube", cubes[0])
+	# cubes = [cubes[0]]
 	cube_path = get_cube_path_hue(cubes, table, table_height)
 	print("cube_path", cube_path)
 
 	manipulator_path = get_manipulator_path(cube_path, default_coords)
 	positions = [x.pose.position for x in manipulator_path]
-	print(positions)
 
-	raw_input("press enter to continue")
+	print("waypoints", positions)
+
+	raw_input("Manipulator path found. Press enter if camera out of the way.")
 
 
 	# default_pose.pose.position.x += 0.1

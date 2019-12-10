@@ -1,14 +1,31 @@
 <launch>
 
+rosrun baxter_tools enable_robot.py -e
+    rosrun baxter_interface joint_trajectory_action_server.py
+roslaunch baxter_moveit_config demo_baxter.launch right_electric_gripper:=true left_electric_gripper:=false
+export ROS_MASTER_URI=http://ayrton.local:11311
+rosrun planning path_test_orig.py baxter
+
+    Vision:
+        rosrun baxter_tools camera_control.py -c right_hand_camera
+#rosrun baxter_tools camera_control.py -l
+rosrun baxter_tools camera_control.py -o right_hand_camera
+    rosrun color_gradient_vision image_processing_node.py
+rosrun image_view image_view image:=/cameras/right_hand_camera/image
+rosrun image_view image_view image:=processed_image
+jupyter command not found:  ~/.local/bin/jupyter-notebook
 
 
-  <node pkg="vision" type="image_processing_node" name="cube_finder" />
-  <node pkg ="planning" type="sort_cubes" name="cube_sorter" />
+  <node pkg="baxter_tools" type="camera_control.py" 
+  <node pkg="vision" type="image_processing_node.py" name="cube_finder" />
+  
 
   <include file="$(find baxter_moveit_config)/launch/move_group.launch"> </include>
 
   <include file="$(find baxter_moveit_config)/launch/moveit_rviz.launch">
     <arg name="config" value="true"/>
   </include>
+
+  <node pkg ="planning" type="sort_cubes" name="cube_sorter" />
 
 </launch>
