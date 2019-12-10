@@ -55,7 +55,6 @@ class PathPlanner(object):
 
         # Instantiate a move group
         self._group = moveit_commander.MoveGroupCommander(group_name)
-        print(self._group)
 
         # Set the maximum time MoveIt will try to plan before giving up
         self._group.set_planning_time(5)
