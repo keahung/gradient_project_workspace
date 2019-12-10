@@ -17,17 +17,18 @@ import imutils
 import matplotlib.pyplot as plt
 import time
 from scipy.spatial import distance as dist
+from matplotlib.colors import hsv_to_rgb
 
 #Import the String message type from the /msg directory of
 #the std_msgs package.
 from sensor_msgs.msg import Image
-from color_gradient_vision.msg import ColorAndPositionPairs, ColorAndPosition  
+from color_gradient_vision.msg import ColorAndPositionPairs, ColorAndPosition
 
-class ImageProcessor(object): 
+class ImageProcessor(object):
 
     def __init__(self):
           self._intialized = False
-          self.bridge = CvBridge() 
+          self.bridge = CvBridge()
 
     # Initialization and loading parameters.
     def Initialize(self):
@@ -41,7 +42,7 @@ class ImageProcessor(object):
         # Register callbacks.
 
         self._sub_topic = "/cameras/right_hand_camera/image" #TODO set this to the topic where the camera publishes to
-        self._pub_topic = "colors_and_position" #TODO 
+        self._pub_topic = "colors_and_position" #TODO
 
         if not self.RegisterCallbacks():
             rospy.logerr("%s: Error registering callbacks.", self._name)
@@ -65,7 +66,11 @@ class ImageProcessor(object):
         #print(self._vis_topic)
         self._vis_pub = rospy.Publisher(self._pub_topic,
                                         ColorAndPositionPairs,
-                                        queue_size=10)
+                                        queue_size=1)
+
+        self._debug_pub = rospy.Publisher("processed_image",
+                                        Image,
+                                        queue_size=1)
 
         return True
 
@@ -87,9 +92,19 @@ class ImageProcessor(object):
 
         (rows,cols,channels) = cv_image.shape
 
-        color_position_list = get_centers(cv_image)
+        color_position_list, image_to_show = get_centers(cv_image)
 
-   
+        #TODO 2nd parameters
+        msgimg = self.bridge.cv2_to_imgmsg(image_copy, "bgr8")
+
+        print("msgimg")
+        print(msgimg)
+
+        self._debug_pub.publish(msgimg)
+
+
+
+
         #cv2.imshow("Image_window", cv_image)
         #cv2.waitKey(3)
         m = ColorAndPositionPairs()
@@ -112,19 +127,19 @@ class ImageProcessor(object):
         a.x = 0
         a.y = 0
         a.R = 10
-        a.G = 10 
+        a.G = 10
         a.B = 10
         b.x = 1
         b.y = 0
         b.R = 10
-        b.G = 10 
+        b.G = 10
         b.B = 10
         m.pairs = [a, b] #TODO what is an array
         '''
 
         # Visualize.
         print("publishing")
-        self._vis_pub.publish(m) 
+        self._vis_pub.publish(m)
 
 
 # functional helper functions
@@ -133,7 +148,7 @@ class ImageProcessor(object):
 def im_gray(img):
     plt.figure()
     plt.imshow(img, cmap= 'gray')
-    
+
 # display an image in color
 def im(img):
     plt.figure()
@@ -174,13 +189,14 @@ def find_average_color(img):
 
 # kills off the top part
 def robot_crop(img):
-    return img[200:, 100:1100, :]
+    #TODO fix robot crop
+    return img[:220, 70:350, :]
 
 def compute_color_rgb(image, c):
     # c original dim: (2, n)
     # c target dim: (n, 1, 2)
     c = np.array([[c[:,i]] for i in range(c.shape[1])])
-    
+
     # construct a mask for the contour, then compute the
     # average L*a*b* value for the masked region
     mask = np.zeros(image.shape[:2], dtype="uint8")
@@ -195,14 +211,19 @@ def compute_color_rgb(image, c):
 def compute_color_hue(image, c):
     # c original dim: (2, n)
     # c target dim: (n, 1, 2)
-    c = np.array([[c[:,i]] for i in range(c.shape[1])])
-    
+    c = np.array([[c[:,i][1], c[:,i][0]] for i in range(c.shape[1])])
+
     # construct a mask for the contour, then compute the
     # average L*a*b* value for the masked region
     mask = np.zeros(image.shape[:2], dtype="uint8")
     cv2.drawContours(mask, [c], -1, 255, -1)
+    #im_gray(mask)
     mask = cv2.erode(mask, None, iterations=2)
-    mean = cv2.mean(image, mask=mask)[:1]
+    # im_gray(mask)
+    mean_h = cv2.mean(image, mask=mask)[0]
+    mean_s = cv2.mean(image, mask=mask)[1]
+    mean_v = cv2.mean(image, mask=mask)[2]
+    mean = np.array([mean_h, mean_s, mean_v])
 
     # return the name of the color with the smallest distance
     return mean #todo
@@ -217,21 +238,23 @@ def get_centers(image):
 
     # downsample and find average <hsv> background color
     image_hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-    image_hsv_ds = downsample(image_hsv, 10000)
-    image_hsv_ds_avg = find_average_color(image_hsv_ds)
+    #image_hsv_ds = downsample(image_hsv, 10000)
+    #image_hsv_ds_avg = find_average_color(image_hsv_ds)
 
     # color threshold on <hsv>, then gaussian filter
-    image_hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+    #image_hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     diff_s = image_hsv[:,:,1] - 0 * np.ones(np.shape(image_hsv)[0:2])
     diff_v = image_hsv[:,:,2]
-    mask = np.logical_or(diff_s > 20, diff_v < 50)
+    #mask = np.logical_or(diff_s > 20, diff_v < 30)
+    mask = diff_s > 20
     mask_int = mask.astype('uint8')
     mask_int = (mask_int / np.max(mask_int) * 255).astype('uint8')
     mask_filtered_gauss = cv2.GaussianBlur(mask_int, (7, 7), 0)
     mask_filtered_gauss = cv2.threshold(mask_filtered_gauss, 254, 256, cv2.THRESH_BINARY)[1]
 
     # morphological opening/closing to remove extra noise
-    kernel = np.ones((5,5), np.uint8)
+    #TODO figure out the resolution problem
+    kernel = np.ones((3,3), np.uint8)
     closing = cv2.morphologyEx(mask_filtered_gauss, cv2.MORPH_CLOSE, kernel, iterations = 2)
     opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel, iterations = 2)
     thresh = opening
@@ -241,7 +264,7 @@ def get_centers(image):
 
     # finding sure foreground area
     dist_transform = cv2.distanceTransform(opening, cv2.DIST_L2, 0)
-    ret, sure_fg = cv2.threshold(dist_transform, 0.6*dist_transform.max(), 255, 0)
+    ret, sure_fg = cv2.threshold(dist_transform, 0.4*dist_transform.max(), 255, 0)
 
     # finding unknown region
     sure_fg = np.uint8(sure_fg)
@@ -270,28 +293,31 @@ def get_centers(image):
         # average all the pixels
         cnt = np.array(np.where(markers == marker))
         color = compute_color_hue(image_hsv, cnt)
-        print(color)
+        print("color: {}".format(color))
         color = [int(c) for c in color]
         index += 1
         #fig.add_subplot(8, 8, index)
-        #color_image = np.array([[[color[0], color[1], color[2]]]])
+        #color_image = np.array([[[color[0], color[1], color[2]]]]).astype('uint8')
+        #print("hsv_original: {}".format(color_image))
+        #color_image = cv2.cvtColor(color_image, cv2.COLOR_HSV2RGB)
         #plt.imshow(color_image)
-        
-        #cnt2 = np.reshape(cnt, (cnt.shape[2], 1, 2))
-        #print(cnt2[:5])
+        #print("rgb_transformed: {}".format(color_image))
+        #color_image = cv2.cvtColor(color_image, cv2.COLOR_RGB2HSV)
+        #print("hsv_transformed: {}".format(color_image))
+        #color_image = hsv_to_rgb(color_image)
+
         coords = np.mean(np.array(np.where(markers == marker)), axis = 1).astype('uint16')
         centers[marker - 2, :] = coords
 
-        #Upscaling coords to be in actual pixel coordinates. Possibly flip y axis. 
-        coords *= np.sqrt(10000)
+        #Upscaling coords to be in actual pixel coordinates. Possibly flip y axis.
+        #coords *= np.sqrt(10000)
         #coords[1] = original_shape[1] - coords[1]
-        
+
         res.append([coords, color])
-        #cv2.circle(image_copy, (coords[1], coords[0]), 2, (0, 255, 0), -1)
+        cv2.circle(image_copy, (coords[1], coords[0]), 2, (0, 255, 0), -1)
     #plt.show()
     print('centers: \n' + str(centers))
     #cv2.imwrite('output.jpg', image_copy)
-    #return image_copy
-    return res
-    
+    return res, image_copy
+
     # write outputs to another topic
