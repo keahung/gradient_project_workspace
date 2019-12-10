@@ -41,7 +41,9 @@ table_height = surface_height
 
 #camera_coords should be an [x, y] pair
 def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
-	table_height = -0.3 #TODO determine table height accurately. 
+	table_height = -0.2 #TODO determine table height accurately. 
+
+	#print("pixel coordinates", camera_coords)
 
 	# projection_matrix = np.array([[1007.739501953125, 0, 617.3479149530467, 0], 
 	# [0, 1011.606872558594, 407.8221878260792, 0], 
@@ -58,7 +60,7 @@ def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
 	q = np.array([q.w, q.x, q.y, q.z])
 	rot = tf.transformations.quaternion_matrix(q)
 	rot = -rot[:3, :3]
-	print(rot)
+	# print(rot)
 
 	t = trans.translation
 	trans = np.array([t.x, t.y, t.z])
@@ -74,34 +76,41 @@ def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
 	raw_x, raw_y = camera_coords[0], camera_coords[1]
 	x, y = camera_model.rectifyPoint((raw_x, raw_y))
 	camera_vec = camera_model.projectPixelTo3dRay((x, y))
+	camera_vec3 = Vector3(camera_vec[0], camera_vec[1], camera_vec[2])
 	#print("tf camera vec", camera_vec)
 
-	#header = camera_transform.header
-	#header.frame_id = camera_transform.child_frame_id
-	#stamped_camera_vec = Vector3Stamped(header, camera_vec)
-	#base_vec = listener.transformVector("base", stamped_camera_vec)
+	header = camera_transform.header
+	header.frame_id = camera_transform.child_frame_id
+	stamped_camera_vec = Vector3Stamped(header, camera_vec3)
+	#print(stamped_camera_vec)
+	base_vec = listener.transformVector3("base", stamped_camera_vec)
+
+	#print("from ros", base_vec)
 
 
 	#potential points will be of the form T + (Rx)t
-	base_vec_basic = np.dot(rot, spacial_vec)
-	base_vec = np.dot(rot, np.array(camera_vec))
+	#base_vec_basic = np.dot(rot, spacial_vec)
+	#base_vec = np.dot(rot, np.array(camera_vec))
+	#print("manual", base_vec)
 	
 
-	print("comparing base vec from ros transform and manual")
-	print(base_vec)
-	print(base_vec_basic)
+	#print("comparing base vec from ros transform and manual")
+	#print(base_vec)
+	#print(base_vec_basic)
 
 
-	b = base_vec
-	t = (table_height - trans[2]) / base_vec[2]
+	b = base_vec.vector
+	t = (table_height - trans[2]) / b.z
 
-	print("camera vec length", t)
+	base_vec_np = np.array([b.x, b.y, b.z])
 
-	cube_pos = t * base_vec + trans
+	#print("camera vec length", t)
+
+	cube_pos = t * base_vec_np + trans
 	return cube_pos
 
 def get_camera_transform(tfBuffer):
-	print("getting camera transform")
+	# print("getting camera transform")
 	rate = rospy.Rate(10.0)
 	while not rospy.is_shutdown():
 		try:
@@ -121,24 +130,25 @@ def process_cubes(cubes, tfBuffer, listener):
 		cube_pos = find_cube_coords((x, y), camera_model, transform, listener)
 		new_cube = (cube_pos[0], cube_pos[1], hue)
 		processed_cubes.append(new_cube)
-	print(processed_cubes)
+	# print(processed_cubes)
 	return processed_cubes
 
 tfBuffer = tf2_ros.Buffer()
-listener = tf2_ros.TransformListener(tfBuffer)
+listener_a = tf2_ros.TransformListener(tfBuffer)
+listener = tf.TransformListener()
 
-while not rospy.is_shutdown():
-	message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
-	cubes = message.pairs
-	cubes = [cubes[0]]
-	cubes[0].x = 630
-	cubes[0].y = 442
-	print("3D cube coordinates")
-	cubes = process_cubes(cubes, tfBuffer, listener)
+# while not rospy.is_shutdown():
+# 	message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
+# 	cubes = message.pairs
+# 	# cubes = [cubes[0]]
+# 	# cubes[0].x = 630
+# 	# cubes[0].y = 442
+# 	print("3D cube coordinates")
+# 	cubes = process_cubes(cubes, tfBuffer, listener)
 
-	print("found cubes", cubes)
+# 	print("found cubes", cubes)
 
-	raw_input("press enter to relocate cubes")
+# 	raw_input("press enter to relocate cubes")
 
 
 #listener = tf.Transformer()
@@ -168,10 +178,13 @@ else:
 table_pose.pose.orientation.w = 1.0
 planner.add_box_obstacle(table_size, "table", table_pose)
 
-cubes = [(0.48, -0.46, "red"), (0.486, -0.46, "blue"), (0.486, -0.46, "green")]
+# cubes = [(0.48, -0.46, "red"), (0.486, -0.46, "blue"), (0.486, -0.46, "green")]
 
 
 while not rospy.is_shutdown():
+
+
+	#Move right arm to default pose. 
 	while not rospy.is_shutdown():
 		try:
 			plan = planner.plan_to_pose(default_pose, [])
@@ -186,21 +199,30 @@ while not rospy.is_shutdown():
 		else:
 			break
 
-	while not rospy.is_shutdown():
-		message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
-		cubes = message.pairs
-		print("3D cube coordinates")
-		cubes = process_cubes(cubes, tfBuffer, listener)
+	raw_input("Press enter if camera correctly positioned")
+	#Get positions of cubes. 
+	message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
+	cubes = message.pairs
+	# cubes = [cubes[0]]
+	# cubes[0].x = 630
+	# cubes[0].y = 442
+	cubes = process_cubes(cubes, tfBuffer, listener)
 
+	#print("found cubes", cubes)
 
-		raw_input("press enter to relocate cubes")
+	table_height = -0.2
+	# cubes[0] = (0.41, -0.4, 100)
+	# print("first cube", cubes[0])
+	# cubes = [cubes[0]]
+	cube_path = get_cube_path_hue(cubes, table, table_height)
+	print("cube_path", cube_path)
 
-	cube_path = get_cube_path_hue(cubes)
-	h_hue(cubes, table, surface_height)
 	manipulator_path = get_manipulator_path(cube_path, default_coords)
+	positions = [x.pose.position for x in manipulator_path]
 
-	print("first cube", cube_path[0])
-	raw_input("press enter to continue")
+	print("waypoints", positions)
+
+	raw_input("Manipulator path found. Press enter if camera out of the way.")
 
 
 	# default_pose.pose.position.x += 0.1
@@ -208,7 +230,7 @@ while not rospy.is_shutdown():
 	# new_coords = default_coords + np.array([0.1, 0, 0])
 	# manipulator_path[0].pose.position = Point(*new_coords)
 	# manipulator_path[0].pose.orientation = Quaternion(*default_orientation)
-	# #Normal path
+	#Normal path
 	# for goal in manipulator_path:
 	# 	print("goal", goal)
 	# 	while not rospy.is_shutdown():
@@ -216,7 +238,7 @@ while not rospy.is_shutdown():
 	# 			plan = planner.plan_to_pose(goal, [])
 
 	# 			# print(plan)
-	# 			raw_input("Press <Enter> to move the right arm to goal pose 3: ")
+	# 			raw_input("Press <Enter> to move cubes: ")
 	# 			result = planner.execute_plan(plan)
 	# 			# print(result)
 	# 			if not result:
@@ -231,7 +253,7 @@ while not rospy.is_shutdown():
 	while not rospy.is_shutdown():
 		try:
 			plan = planner.cartesian_plan_to_pose(waypoints)
-			raw_input("Press <Enter> to move the right arm to goal pose 3: ")
+			raw_input("Press <Enter> to push cube: ")
 			result = planner.execute_plan(plan)
 			if not result:
 				raise Exception("Execution failed")

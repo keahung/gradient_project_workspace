@@ -95,10 +95,10 @@ class ImageProcessor(object):
         color_position_list, image_to_show = get_centers(cv_image)
 
         #TODO 2nd parameters
-        msgimg = self.bridge.cv2_to_imgmsg(image_copy, "bgr8")
+        msgimg = self.bridge.cv2_to_imgmsg(image_to_show, "bgr8")
 
-        print("msgimg")
-        print(msgimg)
+        #print("msgimg")
+        #print(msgimg)
 
         self._debug_pub.publish(msgimg)
 
@@ -190,7 +190,7 @@ def find_average_color(img):
 # kills off the top part
 def robot_crop(img):
     #TODO fix robot crop
-    return img[:220, 70:350, :]
+    return img[:1100, 100:720, :]
 
 def compute_color_rgb(image, c):
     # c original dim: (2, n)
@@ -295,7 +295,7 @@ def get_centers(image):
         # average all the pixels
         cnt = np.array(np.where(markers == marker))
         color = compute_color_hue(image_hsv, cnt)
-        print("color: {}".format(color))
+        #print("color: {}".format(color))
         color = [int(c) for c in color]
         index += 1
         #fig.add_subplot(8, 8, index)
