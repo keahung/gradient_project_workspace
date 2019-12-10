@@ -59,7 +59,7 @@ class PathPlanner(object):
 
         # Set the maximum time MoveIt will try to plan before giving up
         self._group.set_planning_time(5)
-        self._group.set_max_velocity_scaling_factor(0.5)
+        self._group.set_max_velocity_scaling_factor(0.4)
 
         # Set the bounds of the workspace
         self._group.set_workspace([-2, -2, -2, 2, 2, 2])
@@ -104,7 +104,7 @@ class PathPlanner(object):
         self._group.set_start_state_to_current_state()
         plan, fraction = self._group.compute_cartesian_path(waypoints, 0.01, 0)
         #print(plan)
-        print(fraction)
+        print("fraction: ", fraction)
         return plan
 
 
