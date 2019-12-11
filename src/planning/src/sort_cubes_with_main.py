@@ -29,10 +29,10 @@ from ar_track_alvar_msgs.msg import AlvarMarkers
 
 
 #camera_coords should be an [x, y] pair
-def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
-	table_height = -0.24 #TODO determine table height accurately.
+def find_cube_coords(camera_coords, camera_model, camera_transform, listener, table_height):
+	#table_height = -0.24 #TODO determine table height accurately.
 
-	table_height = get_height()
+	
 
 	#print("pixel coordinates", camera_coords)
 
@@ -135,7 +135,9 @@ def process_cubes(cubes, tfBuffer, listener):
 	processed_cubes = []
 	for cube in cubes:
 		y, x, hue = cube.x, cube.y, cube.R
-		cube_pos = find_cube_coords((x, y), camera_model, transform, listener)
+		table_height = get_height()
+		print(table_height)
+		cube_pos = find_cube_coords((x, y), camera_model, transform, listener, table_height)
 		new_cube = (cube_pos[0], cube_pos[1], hue)
 		processed_cubes.append(new_cube)
 	# print(processed_cubes)
@@ -297,11 +299,13 @@ if __name__ == '__main__':
 
 		#print("found cubes", cubes)
 
-		table_height = -0.24
+
+		manipulator_height = get_height() + 0.04
+		print("manipulator height", manipulator_height)
 		# cubes[0] = (0.41, -0.4, 100)
 		# print("first cube", cubes[0])
 		# cubes = [cubes[0]]
-		cube_path = get_cube_path_hue(cubes, table, table_height)
+		cube_path = get_cube_path_hue(cubes, table, manipulator_height)
 		print("cube_path", cube_path)
 
 		manipulator_path = get_manipulator_path(cube_path, default_coords)

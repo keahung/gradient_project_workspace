@@ -42,7 +42,7 @@ def pick_target_cube_hue(cubes, table, surface_height):
 	min_cube = None
 	min_y = float("inf")
 	for cube in cubes:
-		if(cube[1] < min_y):
+		if(cube[1] > min_y):
 			pile_coords = pick_target_position_hue(cube, table, surface_height)
 			#Update min_cube if cube isn't already in target location
 			if((cube[0]-pile_coords[0])**2 + (cube[1]-pile_coords[1])**2 > 0.07**2):
