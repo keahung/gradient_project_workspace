@@ -205,32 +205,32 @@ if __name__ == '__main__':
 
 	# cubes = [(0.48, -0.46, "red"), (0.486, -0.46, "blue"), (0.486, -0.46, "green")]
 
+	# while not rospy.is_shutdown():
+	# 	raw_input("press enter to relocate cube")
+
+	# 	message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
+	# 	cubes = message.pairs
+	# 	# cubes = [cubes[0]]
+	# 	# cubes[0].x = 630
+	# 	# cubes[0].y = 442
+	# 	cubes = process_cubes(cubes, tfBuffer, listener)
+	# 	first_cube = cubes[0]
+	# 	cube_size = np.array([0.02, 0.02, 0.02])
+	# 	cube_pose = PoseStamped()
+	# 	cube_pose.header.frame_id = "base"
+	# 	cube_pose.pose.position.x = first_cube[0]
+	# 	cube_pose.pose.position.y = first_cube[1]
+	# 	cube_pose.pose.position.z = -0.22 # for baxter
+	# 	cube_pose.pose.orientation.w = 1.0
+	# 	planner.remove_obstacle("cube 0")
+	# 	planner.add_box_obstacle(cube_size, "cube 0", cube_pose)
+
+
+
 	while not rospy.is_shutdown():
-		raw_input("press enter to relocate cube")
-
-		message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
-		cubes = message.pairs
-		# cubes = [cubes[0]]
-		# cubes[0].x = 630
-		# cubes[0].y = 442
-		cubes = process_cubes(cubes, tfBuffer, listener)
-		first_cube = cubes[0]
-		cube_size = np.array([0.02, 0.02, 0.02])
-		cube_pose = PoseStamped()
-		cube_pose.header.frame_id = "base"
-		cube_pose.pose.position.x = first_cube[0]
-		cube_pose.pose.position.y = first_cube[1]
-		cube_pose.pose.position.z = -0.22 # for baxter
-		cube_pose.pose.orientation.w = 1.0
-		planner.remove_obstacle("cube 0")
-		planner.add_box_obstacle(cube_size, "cube 0", cube_pose)
 
 
-
-	while not rospy.is_shutdown():
-
-
-		ctr = 0
+		#ctr = 0
 		#Move right arm to default pose. 
 		while not rospy.is_shutdown():
 			try:
@@ -254,16 +254,16 @@ if __name__ == '__main__':
 		# cubes[0].x = 630
 		# cubes[0].y = 442
 		cubes = process_cubes(cubes, tfBuffer, listener)
-		first_cube = cubes[0]
-		cube_size = np.array([0.02, 0.02, 0.02])
-		cube_pose = PoseStamped()
-		cube_pose.header.frame_id = "base"
-		cube_pose.pose.position.x = first_cube[0]
-		cube_pose.pose.position.z = -0.22 # for baxter
-		cube_pose.pose.orientation.w = 1.0
+		# first_cube = cubes[0]
+		# cube_size = np.array([0.02, 0.02, 0.02])
+		# cube_pose = PoseStamped()
+		# cube_pose.header.frame_id = "base"
+		# cube_pose.pose.position.x = first_cube[0]
+		# cube_pose.pose.position.z = -0.22 # for baxter
+		# cube_pose.pose.orientation.w = 1.0
 		planner.remove_obstacle("cube 0")
-		planner.add_box_obstacle(cube_size, "cube 0", cube_pose)
-		ctr += 1
+		# planner.add_box_obstacle(cube_size, "cube 0", cube_pose)
+		# ctr += 1
 
 
 		#print("found cubes", cubes)
