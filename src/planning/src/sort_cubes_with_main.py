@@ -280,7 +280,7 @@ if __name__ == '__main__':
 		# cube_pose.pose.position.x = first_cube[0]
 		# cube_pose.pose.position.z = -0.22 # for baxter
 		# cube_pose.pose.orientation.w = 1.0
-		planner.remove_obstacle("cube 0")
+		#planner.remove_obstacle("cube 0")
 		# planner.add_box_obstacle(cube_size, "cube 0", cube_pose)
 		# ctr += 1
 
@@ -340,7 +340,7 @@ if __name__ == '__main__':
 		# 		else:
 		# 			break
 
-		waypoints = manipulator_path
+		waypoints = [default_pose].extend(manipulator_path)
 		
 		#Cartesian path
 		while not rospy.is_shutdown():

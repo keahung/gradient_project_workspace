@@ -12,4 +12,5 @@
     <arg name="right_electric_gripper" value="true"/>
     <arg name="left_electric_gripper" value="false"/>
   </include>
+  
 </launch>
