@@ -111,17 +111,6 @@ install/local/fast: install/local
 
 .PHONY : install/local/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -132,6 +121,17 @@ install/strip: preinstall
 install/strip/fast: install/strip
 
 .PHONY : install/strip/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -181,36 +181,6 @@ color_gradient_vision_genpy/fast:
 .PHONY : color_gradient_vision_genpy/fast
 
 # Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_generate_messages_py: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule
-
-.PHONY : color_gradient_vision_generate_messages_py
-
-# fast build rule for target.
-color_gradient_vision_generate_messages_py/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/build
-.PHONY : color_gradient_vision_generate_messages_py/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_gennodejs: color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule
-
-.PHONY : color_gradient_vision_gennodejs
-
-# fast build rule for target.
-color_gradient_vision_gennodejs/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/build
-.PHONY : color_gradient_vision_gennodejs/fast
-
-# Convenience name for target.
 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_nodejs.dir/rule:
 	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_nodejs.dir/rule
 .PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_nodejs.dir/rule
@@ -226,334 +196,19 @@ color_gradient_vision_generate_messages_nodejs/fast:
 .PHONY : color_gradient_vision_generate_messages_nodejs/fast
 
 # Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule
+color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-color_gradient_vision_genlisp: color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule
+rosgraph_msgs_generate_messages_cpp: color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
 
-.PHONY : color_gradient_vision_genlisp
+.PHONY : rosgraph_msgs_generate_messages_cpp
 
 # fast build rule for target.
-color_gradient_vision_genlisp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/build
-.PHONY : color_gradient_vision_genlisp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_generate_messages_lisp: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule
-
-.PHONY : color_gradient_vision_generate_messages_lisp
-
-# fast build rule for target.
-color_gradient_vision_generate_messages_lisp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/build
-.PHONY : color_gradient_vision_generate_messages_lisp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_geneus: color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule
-
-.PHONY : color_gradient_vision_geneus
-
-# fast build rule for target.
-color_gradient_vision_geneus/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/build
-.PHONY : color_gradient_vision_geneus/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_generate_messages_eus: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule
-
-.PHONY : color_gradient_vision_generate_messages_eus
-
-# fast build rule for target.
-color_gradient_vision_generate_messages_eus/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/build
-.PHONY : color_gradient_vision_generate_messages_eus/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_gencpp: color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule
-
-.PHONY : color_gradient_vision_gencpp
-
-# fast build rule for target.
-color_gradient_vision_gencpp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/build
-.PHONY : color_gradient_vision_gencpp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_py: color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_py
-
-# fast build rule for target.
-geometry_msgs_generate_messages_py/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
-.PHONY : geometry_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_cpp: color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_cpp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_cpp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
-.PHONY : geometry_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_cpp: color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-.PHONY : roscpp_generate_messages_cpp
-
-# fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_eus: color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_eus
-
-# fast build rule for target.
-geometry_msgs_generate_messages_eus/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_eus.dir/build.make color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_eus.dir/build
-.PHONY : geometry_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_py: color_gradient_vision/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/std_msgs_generate_messages_py.dir/build.make color_gradient_vision/CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: color_gradient_vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_lisp: color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_lisp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_lisp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
-.PHONY : geometry_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_generate_messages_cpp: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule
-
-.PHONY : color_gradient_vision_generate_messages_cpp
-
-# fast build rule for target.
-color_gradient_vision_generate_messages_cpp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/build
-.PHONY : color_gradient_vision_generate_messages_cpp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_nodejs/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule
-
-# Convenience name for target.
-_color_gradient_vision_generate_messages_check_deps_ColorAndPosition: color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule
-
-.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPosition
-
-# fast build rule for target.
-_color_gradient_vision_generate_messages_check_deps_ColorAndPosition/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/build.make color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/build
-.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPosition/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_nodejs: color_gradient_vision/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : std_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-std_msgs_generate_messages_nodejs/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make color_gradient_vision/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
-.PHONY : std_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule
-
-# Convenience name for target.
-_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs: color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule
-
-.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs
-
-# fast build rule for target.
-_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/build.make color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/build
-.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/std_msgs_generate_messages_eus.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_eus: color_gradient_vision/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-.PHONY : std_msgs_generate_messages_eus
-
-# fast build rule for target.
-std_msgs_generate_messages_eus/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make color_gradient_vision/CMakeFiles/std_msgs_generate_messages_eus.dir/build
-.PHONY : std_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_lisp: color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-.PHONY : roscpp_generate_messages_lisp
-
-# fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule
-
-# Convenience name for target.
-color_gradient_vision_generate_messages: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule
-
-.PHONY : color_gradient_vision_generate_messages
-
-# fast build rule for target.
-color_gradient_vision_generate_messages/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/build
-.PHONY : color_gradient_vision_generate_messages/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_nodejs: color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-geometry_msgs_generate_messages_nodejs/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/build.make color_gradient_vision/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/build
-.PHONY : geometry_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_eus: color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-.PHONY : roscpp_generate_messages_eus
-
-# fast build rule for target.
-roscpp_generate_messages_eus/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/build.make color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/build
-.PHONY : roscpp_generate_messages_eus/fast
+rosgraph_msgs_generate_messages_cpp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
+.PHONY : rosgraph_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
 color_gradient_vision/CMakeFiles/roscpp_generate_messages_py.dir/rule:
@@ -586,34 +241,79 @@ rosgraph_msgs_generate_messages_eus/fast:
 .PHONY : rosgraph_msgs_generate_messages_eus/fast
 
 # Convenience name for target.
-color_gradient_vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-std_msgs_generate_messages_cpp: color_gradient_vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+color_gradient_vision_generate_messages_cpp: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/rule
 
-.PHONY : std_msgs_generate_messages_cpp
+.PHONY : color_gradient_vision_generate_messages_cpp
 
 # fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
+color_gradient_vision_generate_messages_cpp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_cpp.dir/build
+.PHONY : color_gradient_vision_generate_messages_cpp/fast
 
 # Convenience name for target.
-color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+rosgraph_msgs_generate_messages_nodejs: color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : rosgraph_msgs_generate_messages_cpp
+.PHONY : rosgraph_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
+rosgraph_msgs_generate_messages_nodejs/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
+.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_cpp: color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+
+.PHONY : roscpp_generate_messages_cpp
+
+# fast build rule for target.
+roscpp_generate_messages_cpp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make color_gradient_vision/CMakeFiles/roscpp_generate_messages_cpp.dir/build
+.PHONY : roscpp_generate_messages_cpp/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule
+
+# Convenience name for target.
+_color_gradient_vision_generate_messages_check_deps_ColorAndPosition: color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/rule
+
+.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPosition
+
+# fast build rule for target.
+_color_gradient_vision_generate_messages_check_deps_ColorAndPosition/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/build.make color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPosition.dir/build
+.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPosition/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_eus: color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+
+.PHONY : roscpp_generate_messages_eus
+
+# fast build rule for target.
+roscpp_generate_messages_eus/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/build.make color_gradient_vision/CMakeFiles/roscpp_generate_messages_eus.dir/build
+.PHONY : roscpp_generate_messages_eus/fast
 
 # Convenience name for target.
 color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
@@ -631,6 +331,21 @@ rosgraph_msgs_generate_messages_py/fast:
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 # Convenience name for target.
+color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_lisp: color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : rosgraph_msgs_generate_messages_lisp
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_lisp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
+.PHONY : rosgraph_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
 color_gradient_vision/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
 	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
 .PHONY : color_gradient_vision/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
@@ -646,19 +361,154 @@ roscpp_generate_messages_nodejs/fast:
 .PHONY : roscpp_generate_messages_nodejs/fast
 
 # Convenience name for target.
-color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+color_gradient_vision_generate_messages_eus: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/rule
 
-.PHONY : rosgraph_msgs_generate_messages_lisp
+.PHONY : color_gradient_vision_generate_messages_eus
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_lisp/fast
+color_gradient_vision_generate_messages_eus/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_eus.dir/build
+.PHONY : color_gradient_vision_generate_messages_eus/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule
+
+# Convenience name for target.
+color_gradient_vision_generate_messages: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/rule
+
+.PHONY : color_gradient_vision_generate_messages
+
+# fast build rule for target.
+color_gradient_vision_generate_messages/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages.dir/build
+.PHONY : color_gradient_vision_generate_messages/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_lisp: color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+
+.PHONY : roscpp_generate_messages_lisp
+
+# fast build rule for target.
+roscpp_generate_messages_lisp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/roscpp_generate_messages_lisp.dir/build
+.PHONY : roscpp_generate_messages_lisp/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule
+
+# Convenience name for target.
+_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs: color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/rule
+
+.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs
+
+# fast build rule for target.
+_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/build.make color_gradient_vision/CMakeFiles/_color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs.dir/build
+.PHONY : _color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule
+
+# Convenience name for target.
+color_gradient_vision_gencpp: color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/rule
+
+.PHONY : color_gradient_vision_gencpp
+
+# fast build rule for target.
+color_gradient_vision_gencpp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_gencpp.dir/build
+.PHONY : color_gradient_vision_gencpp/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule
+
+# Convenience name for target.
+color_gradient_vision_geneus: color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/rule
+
+.PHONY : color_gradient_vision_geneus
+
+# fast build rule for target.
+color_gradient_vision_geneus/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_geneus.dir/build
+.PHONY : color_gradient_vision_geneus/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule
+
+# Convenience name for target.
+color_gradient_vision_genlisp: color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/rule
+
+.PHONY : color_gradient_vision_genlisp
+
+# fast build rule for target.
+color_gradient_vision_genlisp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_genlisp.dir/build
+.PHONY : color_gradient_vision_genlisp/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+color_gradient_vision_generate_messages_lisp: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/rule
+
+.PHONY : color_gradient_vision_generate_messages_lisp
+
+# fast build rule for target.
+color_gradient_vision_generate_messages_lisp/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_lisp.dir/build
+.PHONY : color_gradient_vision_generate_messages_lisp/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule
+
+# Convenience name for target.
+color_gradient_vision_gennodejs: color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/rule
+
+.PHONY : color_gradient_vision_gennodejs
+
+# fast build rule for target.
+color_gradient_vision_gennodejs/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_gennodejs.dir/build
+.PHONY : color_gradient_vision_gennodejs/fast
+
+# Convenience name for target.
+color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f CMakeFiles/Makefile2 color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule
+.PHONY : color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule
+
+# Convenience name for target.
+color_gradient_vision_generate_messages_py: color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/rule
+
+.PHONY : color_gradient_vision_generate_messages_py
+
+# fast build rule for target.
+color_gradient_vision_generate_messages_py/fast:
+	cd /home/cc/ee106a/fa19/class/ee106a-acl/project_workspace/build && $(MAKE) -f color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/build.make color_gradient_vision/CMakeFiles/color_gradient_vision_generate_messages_py.dir/build
+.PHONY : color_gradient_vision_generate_messages_py/fast
 
 # Help Target
 help:
@@ -672,40 +522,30 @@ help:
 	@echo "... test"
 	@echo "... install/local"
 	@echo "... color_gradient_vision_genpy"
-	@echo "... edit_cache"
-	@echo "... color_gradient_vision_generate_messages_py"
-	@echo "... color_gradient_vision_gennodejs"
 	@echo "... color_gradient_vision_generate_messages_nodejs"
+	@echo "... rosgraph_msgs_generate_messages_cpp"
+	@echo "... roscpp_generate_messages_py"
+	@echo "... rosgraph_msgs_generate_messages_eus"
+	@echo "... color_gradient_vision_generate_messages_cpp"
+	@echo "... rosgraph_msgs_generate_messages_nodejs"
+	@echo "... roscpp_generate_messages_cpp"
+	@echo "... _color_gradient_vision_generate_messages_check_deps_ColorAndPosition"
+	@echo "... roscpp_generate_messages_eus"
+	@echo "... rosgraph_msgs_generate_messages_py"
+	@echo "... rosgraph_msgs_generate_messages_lisp"
+	@echo "... roscpp_generate_messages_nodejs"
+	@echo "... color_gradient_vision_generate_messages_eus"
+	@echo "... color_gradient_vision_generate_messages"
+	@echo "... roscpp_generate_messages_lisp"
+	@echo "... _color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs"
+	@echo "... color_gradient_vision_gencpp"
+	@echo "... color_gradient_vision_geneus"
 	@echo "... install/strip"
 	@echo "... color_gradient_vision_genlisp"
 	@echo "... color_gradient_vision_generate_messages_lisp"
-	@echo "... color_gradient_vision_geneus"
-	@echo "... color_gradient_vision_generate_messages_eus"
-	@echo "... color_gradient_vision_gencpp"
-	@echo "... geometry_msgs_generate_messages_py"
-	@echo "... geometry_msgs_generate_messages_cpp"
-	@echo "... roscpp_generate_messages_cpp"
-	@echo "... geometry_msgs_generate_messages_eus"
-	@echo "... std_msgs_generate_messages_py"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... geometry_msgs_generate_messages_lisp"
-	@echo "... color_gradient_vision_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... _color_gradient_vision_generate_messages_check_deps_ColorAndPosition"
-	@echo "... std_msgs_generate_messages_nodejs"
-	@echo "... _color_gradient_vision_generate_messages_check_deps_ColorAndPositionPairs"
-	@echo "... std_msgs_generate_messages_eus"
-	@echo "... roscpp_generate_messages_lisp"
-	@echo "... color_gradient_vision_generate_messages"
-	@echo "... geometry_msgs_generate_messages_nodejs"
-	@echo "... roscpp_generate_messages_eus"
-	@echo "... roscpp_generate_messages_py"
-	@echo "... rosgraph_msgs_generate_messages_eus"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... roscpp_generate_messages_nodejs"
-	@echo "... rosgraph_msgs_generate_messages_lisp"
+	@echo "... color_gradient_vision_gennodejs"
+	@echo "... edit_cache"
+	@echo "... color_gradient_vision_generate_messages_py"
 .PHONY : help
 
 

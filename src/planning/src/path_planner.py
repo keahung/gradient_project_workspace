@@ -47,6 +47,8 @@ class PathPlanner(object):
         # Initialize the robot
         self._robot = moveit_commander.RobotCommander()
 
+        print(self._robot.get_group_names())
+
         # Initialize the planning scene
         self._scene = moveit_commander.PlanningSceneInterface()
 
@@ -102,7 +104,7 @@ class PathPlanner(object):
         waypoints = [waypoint.pose for waypoint in waypoints]
         self._group.set_start_state_to_current_state()
         
-        plan, fraction = self._group.compute_cartesian_path(waypoints, 0.05, 0.0)
+        plan, fraction = self._group.compute_cartesian_path(waypoints, 0.1, 0.0)
         #print(plan)
         print("fraction: ", fraction)
         return plan

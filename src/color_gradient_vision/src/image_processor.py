@@ -246,12 +246,13 @@ def get_centers(image):
     #image_hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     diff_s = image_hsv[:,:,1] - 0 * np.ones(np.shape(image_hsv)[0:2])
     diff_v = image_hsv[:,:,2]
-    #mask = np.logical_or(diff_s > 20, diff_v < 30)
+    # mask = np.logical_or(diff_s > 20, diff_v < 20)
     mask = diff_s > 20
     mask_int = mask.astype('uint8')
     mask_int = (mask_int / np.max(mask_int) * 255).astype('uint8')
     mask_filtered_gauss = cv2.GaussianBlur(mask_int, (7, 7), 0)
     mask_filtered_gauss = cv2.threshold(mask_filtered_gauss, 254, 256, cv2.THRESH_BINARY)[1]
+    # mask_filtered_gauss = mask_int
 
     # morphological opening/closing to remove extra noise
     #TODO figure out the resolution problem
