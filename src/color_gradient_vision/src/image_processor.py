@@ -255,7 +255,7 @@ def get_centers(image):
 
     # morphological opening/closing to remove extra noise
     #TODO figure out the resolution problem
-    kernel = np.ones((3,3), np.uint8)
+    kernel = np.ones((5,5), np.uint8)
     closing = cv2.morphologyEx(mask_filtered_gauss, cv2.MORPH_CLOSE, kernel, iterations = 2)
     opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel, iterations = 2)
     thresh = opening

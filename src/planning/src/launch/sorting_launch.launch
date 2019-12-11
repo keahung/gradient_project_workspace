@@ -1,12 +1,13 @@
 <launch>
-  <node pkg="baxter_tools" type="camera_control.py" args="-o right_hand_camera" />
-  <node pkg= "baxter_tools" type="enable_robot.py" args="-e" />
+  <node pkg="baxter_tools" type="camera_control.py" name="enable_camera" args="-o right_hand_camera" />
+  <node pkg= "baxter_tools" type="enable_robot.py" name="enable_robot" args="-e" />
 
    
-  <node pkg="vision" type="image_processing_node.py" name="cube_finder" />
-  <node pkg="image_view" type="image_view" args="image:=processed_image" />
+  <node pkg="color_gradient_vision" type="image_processing_node.py" name="cube_finder" />
+  <node pkg="image_view" type="image_view" name="image_display" args="image:=processed_image" />
 
-  <node pkg="baxter_interface" type="joint_trajectory_action_server.py" />
+  <node pkg="baxter_interface" type="joint_trajectory_action_server.py" name="joint_server"/>
+
   <include file="$(find baxter_moveit_config)/launch/demo_baxter.launch"> 
     <arg name="right_electric_gripper" value="true"/>
     <arg name="left_electric_gripper" value="false"/>

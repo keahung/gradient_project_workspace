@@ -48,16 +48,16 @@ def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
 	# projection_matrix = np.array([[1007.739501953125, 0, 617.3479149530467, 0], 
 	# [0, 1011.606872558594, 407.8221878260792, 0], 
 	# [0, 0, 1, 0]])
-	projection_matrix = np.array([[404.864031743, 0.0, 630.990886129, 0.0], 
-					[ 0.0, 404.864031743, 442.820007847, 0.0],  
-					[0.0, 0.0, 1.0, 0.0]])
+	# projection_matrix = np.array([[404.864031743, 0.0, 630.990886129, 0.0], 
+	# 				[ 0.0, 404.864031743, 442.820007847, 0.0],  
+	# 				[0.0, 0.0, 1.0, 0.0]])
 
 
 	#print("camera_transform", camera_transform)
 	trans = camera_transform.transform
 
 	q = trans.rotation
-	q = np.array([q.w, q.x, q.y, q.z])
+	q = np.array([q.x, q.y, q.z, q.w])
 	rot = tf.transformations.quaternion_matrix(q)
 	rot = -rot[:3, :3]
 	# print(rot)
@@ -67,10 +67,10 @@ def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
 
 
 
-	camera_point = np.array([camera_coords[0], camera_coords[1], 1])
-	projection_matrix = projection_matrix[:, :3]
-	spacial_vec = np.linalg.solve(projection_matrix, camera_point)
-	spacial_vec /= np.linalg.norm(spacial_vec)
+	# camera_point = np.array([camera_coords[0], camera_coords[1], 1])
+	# projection_matrix = projection_matrix[:, :3]
+	# spacial_vec = np.linalg.solve(projection_matrix, camera_point)
+	# spacial_vec /= np.linalg.norm(spacial_vec)
 	#print("lin alg camera vec", spacial_vec)
 
 	raw_x, raw_y = camera_coords[0], camera_coords[1]
@@ -163,20 +163,20 @@ orien_const.absolute_y_axis_tolerance = 0.1;
 orien_const.absolute_z_axis_tolerance = 0.1;
 orien_const.weight = 1.0;
 
-table_size = np.array([0.6, 1.2, 0.03])
-table_pose = PoseStamped()
-table_pose.header.frame_id = "base"
+# table_size = np.array([0.6, 1.2, 0.03])
+# table_pose = PoseStamped()
+# table_pose.header.frame_id = "base"
 
-#x, y, and z position
-table_pose.pose.position.x = 0.5
-if ROBOT == "baxter":
-	table_pose.pose.position.z = -0.23 # for baxter
-else:
-	table_pose.pose.position.z = -0.33
+# #x, y, and z position
+# table_pose.pose.position.x = 0.5
+# if ROBOT == "baxter":
+# 	table_pose.pose.position.z = -0.28 # for baxter
+# else:
+# 	table_pose.pose.position.z = -0.33
 
-#Orientation as a quaternion
-table_pose.pose.orientation.w = 1.0
-planner.add_box_obstacle(table_size, "table", table_pose)
+# #Orientation as a quaternion
+# table_pose.pose.orientation.w = 1.0
+# planner.add_box_obstacle(table_size, "table", table_pose)
 
 # cubes = [(0.48, -0.46, "red"), (0.486, -0.46, "blue"), (0.486, -0.46, "green")]
 
@@ -184,7 +184,8 @@ planner.add_box_obstacle(table_size, "table", table_pose)
 while not rospy.is_shutdown():
 
 
-	#Move right arm to default pose. 
+	#Move right arm to default pose.
+	cnt = 0 
 	while not rospy.is_shutdown():
 		try:
 			plan = planner.plan_to_pose(default_pose, [])
@@ -207,10 +208,23 @@ while not rospy.is_shutdown():
 	# cubes[0].x = 630
 	# cubes[0].y = 442
 	cubes = process_cubes(cubes, tfBuffer, listener)
+	first_cube = cubes[0]
+	cube_size = np.array([0.02, 0.02, 0.02])
+	cube_pose = PoseStamped()
+	cube_pose.header.frame_id = "base"
+	cube_pose.pose.position.x = first_cube[0]
+	cube_pose.pose.position.z = -0.22 # for baxter
+	cube_pose.pose.orientation.w = 1.0
+	
+	if(cnt > 0):
+		planner.remove_obstacle("cube")
+	planner.add_box_obstacle(cube_size, "cube", cube_pose)
+	cnt += 1
+
 
 	#print("found cubes", cubes)
 
-	table_height = -0.2
+	table_height = -0.24
 	# cubes[0] = (0.41, -0.4, 100)
 	# print("first cube", cubes[0])
 	# cubes = [cubes[0]]
