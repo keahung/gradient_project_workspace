@@ -25,10 +25,14 @@ import image_geometry
 from sensor_msgs.msg import CameraInfo
 from path_planner import PathPlanner
 
+from ar_track_alvar_msgs.msg import AlvarMarkers
+
 
 #camera_coords should be an [x, y] pair
 def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
 	table_height = -0.24 #TODO determine table height accurately.
+
+	table_height = get_height()
 
 	#print("pixel coordinates", camera_coords)
 
@@ -116,6 +120,12 @@ def get_camera_transform(tfBuffer):
 			return trans
 		except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
 			continue
+
+def get_height():
+	ar_marker_info = rospy.wait_for_message("/ar_pose_marker", AlvarMarkers)
+	return ar_marker_info.pose.pose.position.z
+
+
 
 def process_cubes(cubes, tfBuffer, listener):
 	transform = get_camera_transform(tfBuffer)
