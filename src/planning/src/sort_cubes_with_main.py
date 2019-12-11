@@ -16,7 +16,7 @@ from moveit_msgs.msg import OrientationConstraint
 from geometry_msgs.msg import PoseStamped, Quaternion, QuaternionStamped, Vector3, Vector3Stamped
 
 from geometry_msgs.msg import Point
-from color_gradient_vision.msg import ColorAndPositionPairs, ColorAndPosition 
+from color_gradient_vision.msg import ColorAndPositionPairs, ColorAndPosition
 import tf
 from tf.transformations import quaternion_from_euler
 import tf2_ros
@@ -28,15 +28,15 @@ from path_planner import PathPlanner
 
 #camera_coords should be an [x, y] pair
 def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
-	table_height = -0.24 #TODO determine table height accurately. 
+	table_height = -0.24 #TODO determine table height accurately.
 
 	#print("pixel coordinates", camera_coords)
 
-	# projection_matrix = np.array([[1007.739501953125, 0, 617.3479149530467, 0], 
-	# [0, 1011.606872558594, 407.8221878260792, 0], 
+	# projection_matrix = np.array([[1007.739501953125, 0, 617.3479149530467, 0],
+	# [0, 1011.606872558594, 407.8221878260792, 0],
 	# [0, 0, 1, 0]])
-	# projection_matrix = np.array([[404.864031743, 0.0, 630.990886129, 0.0], 
-	# 				[ 0.0, 404.864031743, 442.820007847, 0.0],  
+	# projection_matrix = np.array([[404.864031743, 0.0, 630.990886129, 0.0],
+	# 				[ 0.0, 404.864031743, 442.820007847, 0.0],
 	# 				[0.0, 0.0, 1.0, 0.0]])
 
 
@@ -88,7 +88,7 @@ def find_cube_coords(camera_coords, camera_model, camera_transform, listener):
 	#base_vec_basic = np.dot(rot, spacial_vec)
 	#base_vec = np.dot(rot, np.array(camera_vec))
 	#print("manual", base_vec)
-	
+
 
 	#print("comparing base vec from ros transform and manual")
 	#print(base_vec)
@@ -188,6 +188,10 @@ if __name__ == '__main__':
 	orien_const.absolute_z_axis_tolerance = 0.1;
 	orien_const.weight = 1.0;
 
+	# PATH PLANNER FOR LEFT ARM
+	planner_left = PathPlanner("left_arm")
+
+
 	# table_size = np.array([0.6, 1.2, 0.03])
 	# table_pose = PoseStamped()
 	# table_pose.header.frame_id = "base"
@@ -231,7 +235,7 @@ if __name__ == '__main__':
 
 
 		#ctr = 0
-		#Move right arm to default pose. 
+		#Move right arm to default pose.
 		while not rospy.is_shutdown():
 			try:
 				plan = planner.plan_to_pose(default_pose, [])
@@ -246,8 +250,23 @@ if __name__ == '__main__':
 			else:
 				break
 
+		# Move left arm to vision pose.
+		while not rospy.is_shutdown():
+			try:
+				plan = planner_left.plan_to_pose(vision_pose, [])
+				# print(plan)
+				raw_input("Press <Enter> to move the left arm to vision state: ")
+				result = planner_left.execute_plan(plan)
+				# print(result)
+				if not result:
+					raise Exception("Execution failed")
+			except Exception as e:
+				print(e)
+			else:
+				break
+
 		raw_input("Press enter if camera correctly positioned")
-		#Get positions of cubes. 
+		#Get positions of cubes.
 		message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
 		cubes = message.pairs
 		# cubes = [cubes[0]]
@@ -280,8 +299,23 @@ if __name__ == '__main__':
 
 		print("waypoints", positions)
 
-		raw_input("Manipulator path found. Press enter if camera out of the way.")
+		# raw_input("Manipulator path found. Press enter if camera out of the way.")
+		raw_input("Manipulator path found. Press <Enter> to move camera arm out of the way.")
 
+		# Move left arm out of the way
+		while not rospy.is_shutdown():
+			try:
+				plan = planner_left.plan_to_pose(vision_pose, [])
+				# print(plan)
+				raw_input("Press <Enter> to move the left arm to passive vision state (out of the way): ")
+				result = planner_left.execute_plan(plan)
+				# print(result)
+				if not result:
+					raise Exception("Execution failed")
+			except Exception as e:
+				print(e)
+			else:
+				break
 
 		# default_pose.pose.position.x += 0.1
 		# manipulator_path[0] = default_pose
@@ -307,6 +341,7 @@ if __name__ == '__main__':
 		# 			break
 
 		waypoints = manipulator_path
+		
 		#Cartesian path
 		while not rospy.is_shutdown():
 			try:
@@ -319,4 +354,3 @@ if __name__ == '__main__':
 				print(e)
 			else:
 				break
-

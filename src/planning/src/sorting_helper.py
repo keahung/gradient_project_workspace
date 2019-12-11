@@ -24,11 +24,11 @@ def pick_target_cube(cubes, color_piles):
 	return min_cube
 
 def pick_target_position(cube, cubes, color_piles, surface_height):
-	#For now, always send cubes to the center of the pile they should be in. 
+	#For now, always send cubes to the center of the pile they should be in.
 	return color_piles[cube[2]] + (surface_height,)
 
 
-#Assume cube is a tuple, (x, y, hue). 
+#Assume cube is a tuple, (x, y, hue).
 def pick_target_position_hue(cube, table, surface_height):
 	min_x = table[0] + 0.05
 	max_x = table[1] - 0.05
@@ -68,7 +68,7 @@ def get_color_piles(table, colors):
 		color_piles[colors[i]] = (spacing*(i+1) + min_x, y_level)
 	return color_piles
 
-#Returns the list of positions the target cube should be in as it travels to target. 
+#Returns the list of positions the target cube should be in as it travels to target.
 def get_cube_path(cubes, color_piles):
 	cube = pick_target_cube(cubes, color_piles)
 	cube_pos = np.array((cube[0], cube[1], surface_height))
@@ -76,7 +76,7 @@ def get_cube_path(cubes, color_piles):
 	print(cube_pos, target_pos)
 	return [cube_pos, target_pos]
 
-#Returns the list of positions the target cube should be in as it travels to target. 
+#Returns the list of positions the target cube should be in as it travels to target.
 def get_cube_path_hue(cubes, table, surface_height):
 	cube = pick_target_cube_hue(cubes, table, surface_height)
 	cube_pos = np.array((cube[0], cube[1], surface_height))
@@ -85,7 +85,7 @@ def get_cube_path_hue(cubes, table, surface_height):
 	return [cube_pos, target_pos]
 
 
-#Returns the list of poses the manipulator should go into as it pushes a cube along its path. 
+#Returns the list of poses the manipulator should go into as it pushes a cube along its path.
 def get_manipulator_path(cube_path, start_pos):
 	manipulator_path = []
 	current_pos = start_pos
@@ -158,4 +158,14 @@ default_coords = np.array([0.6, -0.5, -0.15])
 default_orientation = np.array([0.0, -1.0, 0.0, 0.0])
 default_pose = get_pose(default_coords, default_orientation)
 
+# Vision pose for the left arm
+# TODO: determine these coordinates
+vision_coords = np.array([])
+vision_orientation = np.array([0.0, -1.0, 0.0, 0.0])
+vision_pose = get_pose(vision_coords, vision_orientation)
 
+# Passive pose for the left arm (moves it out of th way of the right arm)
+# TODO: determine these coordinates
+vision_coords_passive = np.array([])
+vision_orientation_passive = np.array([0.0, -1.0, 0.0, 0.0])
+vision_pose_passive = get_pose(vision_coords_passive, vision_orientation_passive)
