@@ -129,7 +129,7 @@ def get_height():
 
 
 
-def process_cubes(cubes, tfBuffer, listener):
+def process_cubes(cubes, tfBuffer, listener, table_height):
 	transform = get_camera_transform(tfBuffer)
 	# print("printing cubes info")
 	# print(type(cubes))
@@ -137,8 +137,6 @@ def process_cubes(cubes, tfBuffer, listener):
 	processed_cubes = []
 	for cube in cubes:
 		y, x, hue = cube.x, cube.y, cube.R
-		table_height = get_height()
-		print(table_height)
 		cube_pos = find_cube_coords((x, y), camera_model, transform, listener, table_height)
 		new_cube = (cube_pos[0], cube_pos[1], hue)
 		processed_cubes.append(new_cube)
@@ -168,7 +166,8 @@ if __name__ == '__main__':
 	camera_model.fromCameraInfo(camera_info)
 	print("center pixel of camera", camera_model.project3dToPixel((0, 0, 1)))
 
-	table_height = surface_height
+	table_height = get_height()
+	print("table height", table_height)
 
 	tfBuffer = tf2_ros.Buffer()
 	listener_a = tf2_ros.TransformListener(tfBuffer)
@@ -286,7 +285,7 @@ if __name__ == '__main__':
 		# cubes = [cubes[0]]
 		# cubes[0].x = 630
 		# cubes[0].y = 442
-		cubes = process_cubes(cubes, tfBuffer, listener)
+		cubes = process_cubes(cubes, tfBuffer, listener, table_height)
 		# first_cube = cubes[0]
 		# cube_size = np.array([0.02, 0.02, 0.02])
 		# cube_pose = PoseStamped()
