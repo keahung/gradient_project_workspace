@@ -148,7 +148,7 @@ def get_pose(coords, quaternion):
 	goal.pose.orientation = Quaternion(*quaternion)
 	return goal
 
-table = [0.45, 0.8, -0.27, -0.45]
+table = [0.45, 0.8, -0.45, -0.27]
 colors = ["red", "blue", "green"]
 color_piles = get_color_piles(table, colors)
 #print("color piles", color_piles)
