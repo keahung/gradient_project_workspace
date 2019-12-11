@@ -13,6 +13,8 @@
     <arg name="left_electric_gripper" value="false"/>
   </include>
 
+  <node pkg="planning" type="setup_gripper.py" name="gripper_initializer"/>
+
   <include file="$(find planning)/src/launch/ar_track.launch"> </include>
 
 </launch>
