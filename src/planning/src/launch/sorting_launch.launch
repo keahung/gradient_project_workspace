@@ -13,6 +13,6 @@
     <arg name="left_electric_gripper" value="false"/>
   </include>
 
-  <include file="ar_track.launch"> </include>
+  <include file="$(find planning)/src/launch/ar_track.launch"> </include>
 
 </launch>

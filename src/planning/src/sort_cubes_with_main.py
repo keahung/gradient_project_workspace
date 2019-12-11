@@ -282,6 +282,13 @@ if __name__ == '__main__':
 		#Get positions of cubes.
 		message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
 		cubes = message.pairs
+
+		while len(cubes) <= 0:
+			print("Waiting for multiple cubes")
+			message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
+			cubes = message.pairs
+			rospy.sleep(1)
+		
 		# cubes = [cubes[0]]
 		# cubes[0].x = 630
 		# cubes[0].y = 442
