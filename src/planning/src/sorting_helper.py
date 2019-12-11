@@ -86,8 +86,9 @@ def get_cube_path_hue(cubes, table, surface_height):
 
 
 #Returns the list of poses the manipulator should go into as it pushes a cube along its path.
-def get_manipulator_path(cube_path, start_pos):
-	manipulator_path = []
+def get_manipulator_path(cube_path, start_pose):
+	start_pos = start_pose.position
+	manipulator_path = [start_pose]
 	current_pos = start_pos
 	for i in range(len(cube_path) - 1):
 		cube_pos = cube_path[i]
@@ -149,11 +150,11 @@ def get_pose(coords, quaternion):
 	return goal
 
 table = [0.45, 0.8, -0.45, -0.27]
-colors = ["red", "blue", "green"]
-color_piles = get_color_piles(table, colors)
+#colors = ["red", "blue", "green"]
+#color_piles = get_color_piles(table, colors)
 #print("color piles", color_piles)
 
-surface_height = -0.2
+#surface_height = -0.2
 default_coords = np.array([0.6, -0.5, -0.15])
 default_orientation = np.array([0.0, -1.0, 0.0, 0.0])
 default_pose = get_pose(default_coords, default_orientation)

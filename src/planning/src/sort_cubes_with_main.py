@@ -12,6 +12,8 @@ import rospy
 import numpy as np
 import traceback
 from sorting_helper import *
+from sorting_helper import table, default_pose
+
 from moveit_msgs.msg import OrientationConstraint
 from geometry_msgs.msg import PoseStamped, Quaternion, QuaternionStamped, Vector3, Vector3Stamped
 
@@ -146,7 +148,7 @@ def process_cubes(cubes, tfBuffer, listener):
 def test():
 	cubes = [(0.6, -0.3, "red"), (0.5, -0.2, "blue"), (0.67, -0.25, "green")]
 	cube_path = get_cube_path(cubes, color_piles)
-	manipulator_path = get_manipulator_path(cube_path, default_coords)
+	manipulator_path = get_manipulator_path(cube_path, default_pose)
 
 	print(cube_path)
 	print(manipulator_path)
@@ -302,13 +304,15 @@ if __name__ == '__main__':
 
 		manipulator_height = get_height() + 0.04
 		print("manipulator height", manipulator_height)
+
 		# cubes[0] = (0.41, -0.4, 100)
 		# print("first cube", cubes[0])
 		# cubes = [cubes[0]]
+
 		cube_path = get_cube_path_hue(cubes, table, manipulator_height)
 		print("cube_path", cube_path)
 
-		manipulator_path = get_manipulator_path(cube_path, default_coords)
+		manipulator_path = get_manipulator_path(cube_path, default_pose)
 		positions = [x.pose.position for x in manipulator_path]
 
 		print("waypoints", positions)
@@ -354,7 +358,7 @@ if __name__ == '__main__':
 		# 		else:
 		# 			break
 
-		waypoints = [default_pose].extend(manipulator_path)
+		waypoints = manipulator_path
 		
 		#Cartesian path
 		while not rospy.is_shutdown():
