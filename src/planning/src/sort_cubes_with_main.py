@@ -151,7 +151,23 @@ def test():
 	print(cube_path)
 	print(manipulator_path)
 
+def graph_test():
+	cube = (0.6, -0.3, 80)
+	cubes = [cube]
+	
+	manipulator_height = 0.0
+	
+	cube_path = get_cube_path_hue(cubes, table, manipulator_height)
+	print("cube_path", cube_path)
 
+	manipulator_path = get_manipulator_path(cube_path, default_pose)
+	positions = [x.pose.position for x in manipulator_path]
+
+	print("waypoints", positions)
+	plt.plot([a.x for a in positions], [b.y for b in positions], 'ro')
+	plt.plot([0.45, 0.45, 0.8, 0.8], [-0.45, -0.27, -0.45, -0.27], 'b')
+
+'''
 if __name__ == '__main__':
 
 	rospy.init_node('sort_cubes_node')
@@ -378,3 +394,5 @@ if __name__ == '__main__':
 				print(e)
 			else:
 				break
+
+'''
