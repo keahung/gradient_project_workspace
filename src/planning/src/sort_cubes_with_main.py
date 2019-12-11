@@ -167,7 +167,7 @@ def graph_test():
 	plt.plot([a.x for a in positions], [b.y for b in positions], 'ro')
 	plt.plot([0.45, 0.45, 0.8, 0.8], [-0.45, -0.27, -0.45, -0.27], 'b')
 
-'''
+
 if __name__ == '__main__':
 
 	rospy.init_node('sort_cubes_node')
@@ -394,5 +394,3 @@ if __name__ == '__main__':
 				print(e)
 			else:
 				break
-
-'''

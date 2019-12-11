@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="baxter_tools" type="camera_control.py" name="enable_camera" args="-o right_hand_camera" />
+  <node pkg="baxter_tools" type="camera_control.py" name="enable_camera" args="-o left_hand_camera" />
   <node pkg= "baxter_tools" type="enable_robot.py" name="enable_robot" args="-e" />
 
    

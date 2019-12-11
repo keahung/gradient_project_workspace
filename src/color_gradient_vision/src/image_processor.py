@@ -41,7 +41,7 @@ class ImageProcessor(object):
 
         # Register callbacks.
 
-        self._sub_topic = "/cameras/right_hand_camera/image" #TODO set this to the topic where the camera publishes to
+        self._sub_topic = "/cameras/left_hand_camera/image" #TODO set this to the topic where the camera publishes to
         self._pub_topic = "colors_and_position" #TODO
 
         if not self.RegisterCallbacks():
