@@ -163,7 +163,7 @@ default_pose = get_pose(default_coords, default_orientation)
 # Vision pose for the left arm
 # TODO: determine these coordinates
 #vision_coords = np.array([0.57, -0.168, -0.06])
-vision_coords = np.array([0.615, -0.21, -0.15])
+vision_coords = np.array([0.55, -0.21, 0])
 #vision_coords = np.array([0.49, 0.22, 0.03])
 vision_orientation = np.array([0.01, 0.9846, -0.06, 0.0457])
 vision_orientation = vision_orientation / np.linalg.norm(vision_orientation)

@@ -129,14 +129,32 @@ def get_height(listener):
 	ar_marker_info = rospy.wait_for_message("/ar_pose_marker", AlvarMarkers)
 	print("got ar info")
 	#print(ar_marker_info.markers)
+	#print(ar_marker_info.markers)
 	#ar_marker_info.markers[0].header = ar_marker_info.header
 	ar_marker_info.markers[0].header.frame_id = "/left_hand_camera"
 	print(ar_marker_info.markers[0])
-	base_pose = listener.transformPose("base", ar_marker_info.markers[0])
-	print("got base pose")
-	print(base_pose)
+	#base_pose = listener.transformPose("base", ar_marker_info.markers[0])
+	# print("got base pose")
+	# print(base_pose)
 
 	return ar_marker_info.markers[0].pose.pose.position.z
+
+def get_ar_pose():
+	print("waiting for ar pose")
+	ar_marker_info = rospy.wait_for_message("/ar_pose_marker", AlvarMarkers)
+	print("got ar info")
+	#print(ar_marker_info.markers)
+	#ar_marker_info.markers[0].header = ar_marker_info.header
+	if(len(ar_marker_info.markers) < 1):
+		return None
+	ar_marker_info.markers[0].header.frame_id = "/left_hand_camera"
+	print(ar_marker_info.markers[0])
+	#base_pose = listener.transformPose("base", ar_marker_info.markers[0])
+	# print("got base pose")
+	# print(base_pose)
+
+	return ar_marker_info.markers[0].pose
+
 
 
 
@@ -187,8 +205,8 @@ if __name__ == '__main__':
 	listener_a = tf2_ros.TransformListener(tfBuffer)
 	listener = tf.TransformListener()
 
-	height = get_height(listener)
-	print("height", height)
+	#height = get_height(listener)
+	#print("height", height)
 
 
 	#If projection matrix seems incorrect, get values from
@@ -325,12 +343,29 @@ if __name__ == '__main__':
 			message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
 			cubes = message.pairs
 			rospy.sleep(1)
+
+		manipulator_height = -0.19 #get_height() + 0.04
+
+		
+
+
+		# print("Finding ar tag")
+		# a = get_ar_pose()
+		# while(a is None):
+		# 	print("Waiting for ar tag")
+		# 	a = get_ar_pose()
+		# 	rospy.sleep(1)
+		# a = a.pose.position
+		# center_pos = np.array([a.x, a.y, manipulator_height])
+		# center_pose = get_pose(center_pos, default_orientation)
+
+		
 		
 		# cubes = [cubes[0]]
 		# cubes[0].x = 630
 		# cubes[0].y = 442
 		#print("processing cubes")
-		cubes = process_cubes(cubes, tfBuffer, listener, table_height)
+
 		#print("processed cubes")
 		# first_cube = cubes[0]
 		# cube_size = np.array([0.02, 0.02, 0.02])
@@ -343,26 +378,11 @@ if __name__ == '__main__':
 		# planner.add_box_obstacle(cube_size, "cube 0", cube_pose)
 		# ctr += 1
 
-
-
-
-		manipulator_height = -0.14 #get_height() + 0.04
-		print("manipulator height", manipulator_height)
-
 		# cubes[0] = (0.41, -0.4, 100)
 		# print("first cube", cubes[0][0])
 		# cubes = [cubes[0]]
 
-		cube_path = get_cube_path_hue(cubes, table, manipulator_height)
-		print("cube_path", cube_path)
-
-		manipulator_path = get_manipulator_path(cube_path, default_pose)
-		positions = [x.pose.position for x in manipulator_path]
-
-		print("waypoints", positions)
-
-		# raw_input("Manipulator path found. Press enter if camera out of the way.")
-		raw_input("Manipulator path found. Press <Enter> to move camera arm out of the way.")
+		raw_input("Press <Enter> to move camera arm out of the way.")
 
 		# Move left arm out of the way
 		while not rospy.is_shutdown():
@@ -378,6 +398,42 @@ if __name__ == '__main__':
 				print(e)
 			else:
 				break
+
+
+
+		cubes = process_cubes(cubes, tfBuffer, listener, table_height)
+		
+		# center_pos[2] = 100
+		# cubes = [center_pos]
+
+		cube_path = get_cube_path_hue(cubes, table, manipulator_height)
+		print("cube_path", cube_path)
+
+		manipulator_path = get_manipulator_path(cube_path, default_pose)
+		positions = [x.pose.position for x in manipulator_path]
+
+		print("waypoints", positions)
+
+
+		center_pos = np.array([cubes[0][0], cubes[0][1], manipulator_height + 0.03])
+		center_pose = get_pose(center_pos, default_orientation)
+
+		while not rospy.is_shutdown():
+			try:
+				plan = planner.plan_to_pose(center_pose, [])
+				# print(plan)
+				raw_input("Press <Enter> to move the right arm above ar tag: ")
+				result = planner.execute_plan(plan)
+				# print(result)
+				if not result:
+					raise Exception("Execution failed")
+			except Exception as e:
+				print(e)
+			else:
+				break
+
+
+
 
 		# default_pose.pose.position.x += 0.1
 		# manipulator_path[0] = default_pose
