@@ -33,8 +33,18 @@ def pick_target_position_hue(cube, table, surface_height):
 	min_x = table[0] + 0.05
 	max_x = table[1] - 0.05
 	hue = cube[2]
-	x_pos = min_x + (hue/360)*(max_x - min_x)
-	y_pos = 0.75*table[2] + 0.25*table[3]
+	#_pos = min_x + (hue/360)*(max_x - min_x)
+	#y_pos = 0.75*table[2] + 0.25*table[3]
+
+	# x_pos = min_x + (hue/360)*(max_x - min_x)
+	# y_pos = 0.75*table[2] + 0.25*table[3]
+	if(hue < 30):
+		x_pos, y_pos = 0.5, -0.71
+	elif(hue < 80):
+		x_pos, y_pos = 0.46, -0.41
+	else:
+		x_pos, y_pos = 0.52, -0.18
+
 	return np.array([x_pos, y_pos, surface_height])
 
 def pick_target_cube_hue(cubes, table, surface_height):
@@ -110,7 +120,7 @@ def get_manipulator_path(cube_path, start_pose):
 		target_state = get_pose(target_pos, ready_orien)
 
 		manipulator_path.extend([offset_state, ready_state, target_state])
-
+		# manipulator_path.extend([ready_state, target_state])
 		#------------------------------
 		current_pos = target_pos
 
@@ -120,7 +130,9 @@ def get_manipulator_path(cube_path, start_pose):
 def get_start_coordinates(cube_pos, target_pos):
 	delta = target_pos - cube_pos
 	delta = delta / np.linalg.norm(delta)
-	ready_pos = cube_pos - 0.08*delta
+	rot_vec = np.array([-delta[1], delta[0], 0])
+
+	ready_pos = cube_pos - 0.04*delta - 0.01*rot_vec
 	return ready_pos
 
 def get_offset_point(cube_pos, ready_pos, current_pos):
@@ -158,7 +170,7 @@ table = [0.45, 0.8, -0.45, -0.27]
 #print("color piles", color_piles)
 
 #surface_height = -0.2
-default_coords = np.array([0.6, -0.5, -0.08])
+default_coords = np.array([0.6, -0.5, -0.02])
 default_orientation = np.array([0.0, -1.0, 0.0, 0.0])
 default_pose = get_pose(default_coords, default_orientation)
 
