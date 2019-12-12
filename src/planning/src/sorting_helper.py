@@ -44,9 +44,11 @@ def pick_target_cube_hue(cubes, table, surface_height):
 		if(cube[1] > min_y):
 			pile_coords = pick_target_position_hue(cube, table, surface_height)
 			#Update min_cube if cube isn't already in target location
-			if((cube[0]-pile_coords[0])**2 + (cube[1]-pile_coords[1])**2 > 0.07**2):
+			if((cube[0]-pile_coords[0])**2 + (cube[1]-pile_coords[1])**2 > 0.02**2):
 				min_cube = cube
 				min_y = cube[1]
+
+	print("selected cube:", min_cube)
 	return min_cube
 
 
@@ -137,7 +139,7 @@ def get_offset_point(cube_pos, ready_pos, current_pos):
 def get_push_orientation(cube_pos, target_pos):
 	delta = target_pos - cube_pos
 	theta_x = 3.1416
-	theta_z = (float) (3.14/4 + np.arctan2(delta[1], delta[0]))
+	theta_z = (float) (np.arctan2(delta[1], delta[0]))
 	#start_pose.pose.orientation.y = -1
 	orientation = quaternion_from_euler(theta_x, 0, theta_z)
 	return orientation
