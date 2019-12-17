@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 import sys
-assert sys.argv[1] in ("sawyer", "baxter")
-ROBOT = sys.argv[1]
-
-if ROBOT == "baxter":
-	from baxter_interface import Limb
-else:
-	from intera_interface import Limb
+from baxter_interface import Limb
 
 import rospy
 import numpy as np
@@ -78,8 +72,8 @@ def find_cube_coords(camera_coords, camera_model, camera_transform, listener, ta
 
 	stamped_test_vec = Vector3Stamped(header, Vector3(1, 0, 0))
 	rotated_test_vec = listener.transformVector3("base", stamped_test_vec)
-	print("ros rotated", rotated_test_vec.vector)
-	print("rotation", rot)
+	#print("ros rotated", rotated_test_vec.vector)
+	#print("rotation", rot)
 
 
 	#print(stamped_camera_vec)
@@ -155,9 +149,6 @@ def get_ar_pose():
 
 	return ar_marker_info.markers[0].pose
 
-
-
-
 def process_cubes(cubes, tfBuffer, listener, table_height):
 	transform = get_camera_transform(tfBuffer)
 	# print("printing cubes info")
@@ -171,6 +162,22 @@ def process_cubes(cubes, tfBuffer, listener, table_height):
 		processed_cubes.append(new_cube)
 	# print(processed_cubes)
 	return processed_cubes
+
+def move_to_default(planner):
+	#Move right arm to default pose.
+	while not rospy.is_shutdown():
+		try:
+			plan = planner.plan_to_pose(default_pose, [])
+			# print(plan)
+			raw_input("Press <Enter> to move the right arm to default state: ")
+			result = planner.execute_plan(plan)
+			# print(result)
+			if not result:
+				raise Exception("Execution failed")
+		except Exception as e:
+			print(e)
+		else:
+			break
 
 def test():
 	cubes = [(0.6, -0.3, "red"), (0.5, -0.2, "blue"), (0.67, -0.25, "green")]
@@ -216,7 +223,15 @@ if __name__ == '__main__':
 	#print(camera_info)
 	camera_model = image_geometry.PinholeCameraModel()
 	camera_model.fromCameraInfo(camera_info)
-	print("center pixel of camera", camera_model.project3dToPixel((0, 0, 1)))
+
+	#print corresponding pixel coordinates for different 3d points. 
+	# while(True):
+	# 	raw_input("press enter to continue")
+	# 	print("center pixel of camera", camera_model.project3dToPixel((0, 0, 1)))
+	# 	print("upper pixel of camera", camera_model.project3dToPixel((0, 0.3, 1)))
+	# 	print("side pixel of camera", camera_model.project3dToPixel((0.3, 0, 1)))
+
+	# assert False
 
 	table_height = -0.18 #get_height()
 	print("table height", table_height)
@@ -262,41 +277,51 @@ if __name__ == '__main__':
 
 	#x, y, and z position
 	table_pose.pose.position.x = 0.5
-	if ROBOT == "baxter":
-		table_pose.pose.position.z = -0.27 # for baxter
-	else:
-		table_pose.pose.position.z = -0.33
+
+	table_pose.pose.position.z = -0.27 # for baxter
+
 
 	#Orientation as a quaternion
 	table_pose.pose.orientation.w = 1.0
 	planner.add_box_obstacle(table_size, "table", table_pose)
 
-	# cubes = [(0.48, -0.46, "red"), (0.486, -0.46, "blue"), (0.486, -0.46, "green")]
-
+	# # Move right arm to four corners
+	# raw_input("move left arm out of way")
+	# # Move left arm out of the way
 	# while not rospy.is_shutdown():
-	# 	raw_input("press enter to relocate cube")
+	# 	try:
+	# 		plan = planner_left.plan_to_pose(vision_pose_passive, [])
+	# 		# print(plan)
+	# 		#raw_input("Press <Enter> to move the left arm to passive vision state (out of the way): ")
+	# 		result = planner_left.execute_plan(plan)
+	# 		# print(result)
+	# 		if not result:
+	# 			raise Exception("Execution failed")
+	# 	except Exception as e:
+	# 		print(e)
+	# 	else:
+	# 		break
 
-	# 	message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
-	# 	cubes = message.pairs
-	# 	# cubes = [cubes[0]]
-	# 	# cubes[0].x = 630
-	# 	# cubes[0].y = 442
-	# 	cubes = process_cubes(cubes, tfBuffer, listener)
-	# 	first_cube = cubes[0]
-	# 	cube_size = np.array([0.02, 0.02, 0.02])
-	# 	cube_pose = PoseStamped()
-	# 	cube_pose.header.frame_id = "base"
-	# 	cube_pose.pose.position.x = first_cube[0]
-	# 	cube_pose.pose.position.y = first_cube[1]
-	# 	cube_pose.pose.position.z = -0.22 # for baxter
-	# 	cube_pose.pose.orientation.w = 1.0
-	# 	planner.remove_obstacle("cube 0")
-	# 	planner.add_box_obstacle(cube_size, "cube 0", cube_pose)
-
-
-
+	# for corner in table_corners:
+	# 	raw_input("move to next corner")
+	# 	while not rospy.is_shutdown():
+	# 		try:
+	# 			plan = planner.plan_to_pose(corner, [])
+	# 			# print(plan)
+	# 			#raw_input("Press <Enter> to move the left arm to passive vision state (out of the way): ")
+	# 			result = planner.execute_plan(plan)
+	# 			# print(result)
+	# 			if not result:
+	# 				raise Exception("Execution failed")
+	# 		except Exception as e:
+	# 			print(e)
+	# 		else:
+	# 			break
 
 	while not rospy.is_shutdown():
+
+		raw_input("press enter to start")
+		move_to_default(planner)
 
 		# Move left arm to vision pose.
 		while not rospy.is_shutdown():
@@ -313,30 +338,11 @@ if __name__ == '__main__':
 			else:
 				break
 
-
-		#ctr = 0
-		#Move right arm to default pose.
-		while not rospy.is_shutdown():
-			try:
-				plan = planner.plan_to_pose(default_pose, [])
-				# print(plan)
-				raw_input("Press <Enter> to move the right arm to default state: ")
-				result = planner.execute_plan(plan)
-				# print(result)
-				if not result:
-					raise Exception("Execution failed")
-			except Exception as e:
-				print(e)
-			else:
-				break
-
-
-
 		raw_input("Press enter if camera correctly positioned")
+
 		#Get positions of cubes.
 		message = rospy.wait_for_message("/colors_and_position", ColorAndPositionPairs)
 		cubes = message.pairs
-		print("got cube positions", cubes)
 
 		while len(cubes) <= 0:
 			print("Waiting for multiple cubes")
@@ -344,7 +350,11 @@ if __name__ == '__main__':
 			cubes = message.pairs
 			rospy.sleep(1)
 
-		manipulator_height = -0.19 #get_height() + 0.04
+		print("got cube positions", cubes)
+
+		cubes = process_cubes(cubes, tfBuffer, listener, table_height)
+
+		manipulator_height = -0.07 #get_height() + 0.04
 
 		
 
@@ -359,8 +369,6 @@ if __name__ == '__main__':
 		# center_pos = np.array([a.x, a.y, manipulator_height])
 		# center_pose = get_pose(center_pos, default_orientation)
 
-		
-		
 		# cubes = [cubes[0]]
 		# cubes[0].x = 630
 		# cubes[0].y = 442
@@ -382,14 +390,12 @@ if __name__ == '__main__':
 		# print("first cube", cubes[0][0])
 		# cubes = [cubes[0]]
 
-		raw_input("Press <Enter> to move camera arm out of the way.")
-
 		# Move left arm out of the way
 		while not rospy.is_shutdown():
 			try:
 				plan = planner_left.plan_to_pose(vision_pose_passive, [])
 				# print(plan)
-				raw_input("Press <Enter> to move the left arm to passive vision state (out of the way): ")
+				#raw_input("Press <Enter> to move the left arm to passive vision state (out of the way): ")
 				result = planner_left.execute_plan(plan)
 				# print(result)
 				if not result:
@@ -401,38 +407,47 @@ if __name__ == '__main__':
 
 
 
-		cubes = process_cubes(cubes, tfBuffer, listener, table_height)
+		
 		
 		# center_pos[2] = 100
 		# cubes = [center_pos]
 
 		cube_path = get_cube_path_hue(cubes, table, manipulator_height)
-		print("cube_path", cube_path)
+		#print("cube_path", cube_path)
 
 		manipulator_path = get_manipulator_path(cube_path, default_pose)
 		positions = [x.pose.position for x in manipulator_path]
 
-		print("waypoints", positions)
+		#print("waypoints", positions)
 
+		# max_cube = cubes[0]
+		# max_val = -float("inf")
 
-		center_pos = np.array([cubes[0][0], cubes[0][1], manipulator_height + 0.03])
-		center_pose = get_pose(center_pos, default_orientation)
+		# for cube in cubes:
+		# 	if(cube[1] >= max_val):
+		# 		max_cube = cube
 
-		while not rospy.is_shutdown():
-			try:
-				plan = planner.plan_to_pose(center_pose, [])
-				# print(plan)
-				raw_input("Press <Enter> to move the right arm above ar tag: ")
-				result = planner.execute_plan(plan)
-				# print(result)
-				if not result:
-					raise Exception("Execution failed")
-			except Exception as e:
-				print(e)
-			else:
-				break
+		current_pose = default_pose
 
-
+		for cube in cubes:
+			center_pos = np.array([cube[0], cube[1], manipulator_height - 0.085])
+			center_pose = get_pose(center_pos, default_orientation)
+			#center_waypoints = [default_pose, center_pose]
+			#move_to_default(planner)
+			
+			while not rospy.is_shutdown():
+				try:
+					plan = planner.plan_to_pose(center_pose, [])
+					# print(plan)
+					raw_input("Press <Enter> to move the right arm above another cube: ")
+					result = planner.execute_plan(plan)
+					# print(result)
+					if not result:
+						raise Exception("Execution failed")
+				except Exception as e:
+					print(e)
+				else:
+					break
 
 
 		# default_pose.pose.position.x += 0.1

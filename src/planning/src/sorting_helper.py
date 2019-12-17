@@ -8,6 +8,18 @@ from geometry_msgs.msg import Point
 from tf.transformations import quaternion_from_euler
 
 
+#readings should be a list of lists of cubes, with each inner list 
+#corresponding to a single reading from the left arm. 
+def filter_readings(readings, table):
+	test = lambda cube: test_cube(cube, table)
+	filtered_readings = []
+	for cubes in readings:
+		new_cubes = filter(cubes, test)
+		filtered_readings.append(new_cubes)
+	return filtered_readings
+
+def test_cube(cube, table):
+	return cube[0] >= table[0] and cube[0] <= table[1] and cube[1] >= table[2] and cube[1] <= table[3]
 
 #cubes is a list of tuples (x, y, color)
 #color_piles is a dictionary with entries color: pile coordinates
@@ -39,11 +51,11 @@ def pick_target_position_hue(cube, table, surface_height):
 	# x_pos = min_x + (hue/360)*(max_x - min_x)
 	# y_pos = 0.75*table[2] + 0.25*table[3]
 	if(hue < 30):
-		x_pos, y_pos = 0.5, -0.71
+		x_pos, y_pos = 0.5, -0.51
 	elif(hue < 80):
-		x_pos, y_pos = 0.46, -0.41
+		x_pos, y_pos = 0.46, -0.51
 	else:
-		x_pos, y_pos = 0.52, -0.18
+		x_pos, y_pos = 0.4, -0.58
 
 	return np.array([x_pos, y_pos, surface_height])
 
@@ -60,7 +72,6 @@ def pick_target_cube_hue(cubes, table, surface_height):
 
 	print("selected cube:", min_cube)
 	return min_cube
-
 
 def bounding_rectangle(cubes):
 	x_vals = [cube[0] for cube in cubes]
@@ -132,7 +143,7 @@ def get_start_coordinates(cube_pos, target_pos):
 	delta = delta / np.linalg.norm(delta)
 	rot_vec = np.array([-delta[1], delta[0], 0])
 
-	ready_pos = cube_pos - 0.04*delta - 0.01*rot_vec
+	ready_pos = cube_pos - 0.04*delta #- 0.01*rot_vec
 	return ready_pos
 
 def get_offset_point(cube_pos, ready_pos, current_pos):
@@ -165,6 +176,8 @@ def get_pose(coords, quaternion):
 	return goal
 
 table = [0.45, 0.8, -0.45, -0.27]
+
+
 #colors = ["red", "blue", "green"]
 #color_piles = get_color_piles(table, colors)
 #print("color piles", color_piles)
@@ -177,7 +190,7 @@ default_pose = get_pose(default_coords, default_orientation)
 # Vision pose for the left arm
 # TODO: determine these coordinates
 #vision_coords = np.array([0.57, -0.168, -0.06])
-vision_coords = np.array([0.55, -0.21, 0])
+vision_coords = np.array([0.6, -0.21, 0])
 #vision_coords = np.array([0.49, 0.22, 0.03])
 vision_orientation = np.array([0.01, 0.9846, -0.06, 0.0457])
 vision_orientation = vision_orientation / np.linalg.norm(vision_orientation)
@@ -188,3 +201,11 @@ vision_pose = get_pose(vision_coords, vision_orientation)
 vision_coords_passive = np.array([0.49, 0.22, 0.03])
 vision_orientation_passive = np.array([0.0, -1.0, 0.0, 0.0])
 vision_pose_passive = get_pose(vision_coords_passive, vision_orientation_passive)
+
+table_corners = []
+
+for i in range(2):
+	for j in range(2, 4):
+		corner = np.array([table[i], table[j], -0.07])
+		corner_pose = get_pose(corner, default_orientation)
+		table_corners.append(corner_pose)

@@ -77,6 +77,9 @@ class PathPlanner(object):
         self._group = None
         rospy.loginfo("Stopping Path Planner")
 
+    def get_current_pose(self):
+        return self._group.get_current_pose()
+
     def plan_to_pose(self, target, orientation_constraints):
         """
         Generates a plan given an end effector pose subject to orientation constraints
@@ -104,7 +107,7 @@ class PathPlanner(object):
         waypoints = [waypoint.pose for waypoint in waypoints]
         self._group.set_start_state_to_current_state()
         
-        plan, fraction = self._group.compute_cartesian_path(waypoints, 0.1, 0.0)
+        plan, fraction = self._group.compute_cartesian_path(waypoints, 0.01, 100.0)
         #print(plan)
         print("fraction: ", fraction)
         return plan
