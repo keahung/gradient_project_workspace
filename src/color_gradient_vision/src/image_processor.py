@@ -190,7 +190,7 @@ def find_average_color(img):
 # kills off the top part
 def robot_crop(img):
     #TODO fix robot crop
-    return img[:1100, 100:720, :]
+    return img[:, 50:-50, :], 50
 
 def compute_color_rgb(image, c):
     # c original dim: (2, n)
@@ -235,10 +235,12 @@ def get_centers(image):
 
     # load image as <rgb> and crop if necessary
     image = cv2.cvtColor(image.astype('uint8'), cv2.COLOR_BGR2RGB)
-    #image = robot_crop(image)
+    image_original = image
+    image, yoff = robot_crop(image)
 
     # downsample and find average <hsv> background color
-    image_hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+    image_filtered = cv2.bilateralFilter(image, 15, 75, 75)
+    image_hsv = cv2.cvtColor(image_filtered, cv2.COLOR_RGB2HSV)
     #image_hsv_ds = downsample(image_hsv, 10000)
     #image_hsv_ds_avg = find_average_color(image_hsv_ds)
 
@@ -281,7 +283,9 @@ def get_centers(image):
 
     # run watershed algorithm
     image_copy = np.copy(image)
+    # image_copy_original = np.copy(image_original)
     markers = cv2.watershed(image_copy, markers)
+    # markers_original =
     image_copy[markers == -1] = [255,0,0]
 
 
@@ -313,9 +317,10 @@ def get_centers(image):
         #coords[1] = original_shape[1] - coords[1]
 
         centers[marker - 2, :] = coords
-        
-        res.append([coords, color])
+
+        res.append([np.array([coords[0], coords[1] + yoff]), color])
         cv2.circle(image_copy, (coords[1], coords[0]), 2, (0, 255, 0), -1)
+        # cv2.circle(image_copy_original, (coords[1] + yoff, coords[0]), 2, (0, 255, 0), -1)
     #plt.show()
     print('centers: \n' + str(centers))
     #cv2.imwrite('output.jpg', image_copy)
