@@ -100,7 +100,7 @@ def find_cube_coords(camera_coords, camera_model, camera_transform, listener, ta
 
 	base_vec_np = np.array([b.x, b.y, b.z])
 
-	print(base_vec_np)
+	#print(base_vec_np)
 
 	print("camera vec length", t)
 
@@ -233,7 +233,7 @@ if __name__ == '__main__':
 
 	# assert False
 
-	table_height = -0.18 #get_height()
+	table_height = -0.14 #get_height()
 	print("table height", table_height)
 
 
@@ -321,6 +321,7 @@ if __name__ == '__main__':
 	while not rospy.is_shutdown():
 
 		raw_input("press enter to start")
+
 		move_to_default(planner)
 
 		# Move left arm to vision pose.
@@ -351,10 +352,12 @@ if __name__ == '__main__':
 			rospy.sleep(1)
 
 		print("got cube positions", cubes)
+		print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+		print("total cubes detected:", len(cubes))
 
 		cubes = process_cubes(cubes, tfBuffer, listener, table_height)
 
-		manipulator_height = -0.07 #get_height() + 0.04
+		manipulator_height = -0.11 #get_height() + 0.04
 
 		
 
@@ -430,7 +433,7 @@ if __name__ == '__main__':
 		current_pose = default_pose
 
 		for cube in cubes:
-			center_pos = np.array([cube[0], cube[1], manipulator_height - 0.085])
+			center_pos = np.array([cube[0], cube[1], manipulator_height + 0.06])
 			center_pose = get_pose(center_pos, default_orientation)
 			#center_waypoints = [default_pose, center_pose]
 			#move_to_default(planner)
@@ -449,15 +452,17 @@ if __name__ == '__main__':
 				else:
 					break
 
+		move_to_default(planner)
 
 		# default_pose.pose.position.x += 0.1
 		# manipulator_path[0] = default_pose
 		# new_coords = default_coords + np.array([0.1, 0, 0])
 		# manipulator_path[0].pose.position = Point(*new_coords)
 		# manipulator_path[0].pose.orientation = Quaternion(*default_orientation)
+
 		#Normal path
 		for goal in manipulator_path:
-			print("goal", goal)
+			#print("goal", goal)
 			while not rospy.is_shutdown():
 				try:
 					plan = planner.plan_to_pose(goal, [])
